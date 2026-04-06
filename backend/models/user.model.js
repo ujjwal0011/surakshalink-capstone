@@ -1,0 +1,32 @@
+import mongoose from "mongoose";
+
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  role: {
+    type: String,
+    enum: ["principal", "teacher", "student"],
+    required: true,
+  },
+  schoolId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "School",
+    required: true,
+  },
+
+  // NEW: For Teachers -> The code they give to students (e.g. "BIO-101")
+  myClassCode: { type: String, unique: true, sparse: true },
+
+  // NEW: For Students -> Links them to a specific teacher
+  teacherId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+
+  totalXP: { type: Number, default: 0 },
+
+  createdAt: { type: Date, default: Date.now },
+});
+
+export default mongoose.model("User", userSchema);
