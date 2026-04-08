@@ -6,7 +6,7 @@ import api from '../../services/api';
 import toast from 'react-hot-toast';
 
 const TeacherDashboard = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const { socket } = useSocket();
   
   const [students, setStudents] = useState([]);
@@ -68,24 +68,20 @@ const TeacherDashboard = () => {
   if (!activeAlert) {
     return (
       <div className="p-8 bg-gray-50 min-h-screen">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800">Classroom Manager</h1>
-            {/* UPDATED: Display Class Code */}
-            <div className="mt-2 flex items-center gap-2">
-              <span className="text-gray-500">Your Class Code:</span>
-              <span className="bg-blue-100 text-blue-800 font-mono font-bold px-3 py-1 rounded text-lg border border-blue-200">
-                {user?.myClassCode || 'Loading...'}
-              </span>
-              <Link 
-      to="/dashboard/teacher/quizzes"
-      className="bg-purple-600 text-white px-4 py-2 rounded shadow font-semibold hover:bg-purple-700 flex items-center"
-    >
-      Manage Quizzes
-    </Link>
-            </div>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-800">Classroom Manager</h1>
+          <div className="mt-2 flex items-center gap-2">
+            <span className="text-gray-500">Your Class Code:</span>
+            <span className="bg-blue-100 text-blue-800 font-mono font-bold px-3 py-1 rounded text-lg border border-blue-200">
+              {user?.myClassCode || 'Loading...'}
+            </span>
+            <Link 
+              to="/dashboard/teacher/quizzes"
+              className="bg-purple-600 text-white px-4 py-2 rounded shadow font-semibold hover:bg-purple-700 flex items-center"
+            >
+              Manage Quizzes
+            </Link>
           </div>
-          <button onClick={logout} className="text-red-600 font-semibold hover:underline">Logout</button>
         </div>
 
         

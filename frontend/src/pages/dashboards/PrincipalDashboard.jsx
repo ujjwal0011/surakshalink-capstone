@@ -6,7 +6,7 @@ import api from "../../services/api";
 import toast from "react-hot-toast";
 
 const PrincipalDashboard = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const { socket } = useSocket();
 
   const [customMessage, setCustomMessage] = useState("");
@@ -109,16 +109,11 @@ const PrincipalDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">
-            Principal Command Center
-          </h1>
-          <p className="text-gray-500 text-sm">School Code: {user?.schoolId}</p>
-        </div>
-        <button onClick={logout} className="text-red-600 font-semibold">
-          Logout
-        </button>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-800">
+          Principal Command Center
+        </h1>
+        <p className="text-gray-500 text-sm">School Code: {user?.schoolId}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

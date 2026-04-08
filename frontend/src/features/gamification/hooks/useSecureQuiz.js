@@ -20,11 +20,19 @@ export const useSecureQuiz = (isActive, onMaxViolations) => {
     const [violations, setViolations] = useState(0);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const violationsRef = useRef(0); // Ref to avoid stale closures
+    const hasBeenFullscreenRef = useRef(false); // Track if fullscreen was ever successfully entered
 
     // Keep ref in sync with state
     useEffect(() => {
         violationsRef.current = violations;
     }, [violations]);
+
+    // Reset fullscreen tracking when security becomes inactive
+    useEffect(() => {
+        if (!isActive) {
+            hasBeenFullscreenRef.current = false;
+        }
+    }, [isActive]);
 
     // --- Violation Handler ---
     const addViolation = useCallback((reason) => {
@@ -78,12 +86,16 @@ export const useSecureQuiz = (isActive, onMaxViolations) => {
             const isFull = !!document.fullscreenElement;
             setIsFullscreen(isFull);
 
-            if (!isFull && isActive) {
-                // Student exited fullscreen during quiz
+            if (isFull) {
+                // Fullscreen was successfully entered (either initial or re-entry)
+                hasBeenFullscreenRef.current = true;
+            } else if (!isFull && isActive && hasBeenFullscreenRef.current) {
+                // Student EXITED fullscreen after it was previously active — this is a real violation
                 addViolation('Exited fullscreen');
                 // Try to re-enter fullscreen
                 setTimeout(() => enterFullscreen(), 500);
             }
+            // If !isFull && !hasBeenFullscreenRef.current => still entering for the first time, no violation
         };
 
         document.addEventListener('fullscreenchange', handleFullscreenChange);

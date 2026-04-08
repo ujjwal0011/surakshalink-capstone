@@ -1,15 +1,18 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-import { Toaster } from "react-hot-toast"; // Notifications
+import { Toaster } from "react-hot-toast";
 
-// Pages (You'll create these next)
+// Layout
+import DashboardLayout from "./components/DashboardLayout";
+
+// Pages
+import LandingPage from "./pages/LandingPage";
 import Login from "./pages/auth/Login";
 import RegisterPrincipal from "./pages/auth/RegisterPrincipal";
 import RegisterTeacher from "./pages/auth/RegisterTeacher";
 import RegisterStudent from "./pages/auth/RegisterStudent";
 import PrincipalDashboard from "./pages/dashboards/PrincipalDashboard";
 import TeacherDashboard from "./pages/dashboards/TeacherDashboard";
-import StudentDashboard from "./pages/dashboards/StudentDashboard";
 import QuizManager from "./pages/dashboards/teacher-views/QuizManager";
 import CreateQuiz from "./pages/dashboards/teacher-views/CreateQuiz";
 import QuizAnalytics from "./pages/dashboards/teacher-views/QuizAnalytics";
@@ -27,52 +30,57 @@ function App() {
           <Toaster position="top-right" />
           <Routes>
             {/* Public Routes */}
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register-principal" element={<RegisterPrincipal />} />
             <Route path="/register-teacher" element={<RegisterTeacher />} />
             <Route path="/register-student" element={<RegisterStudent />} />
 
-            {/* Protected Routes */}
+            {/* Protected Routes — Wrapped with DashboardLayout (navbar) */}
 
             {/* Principal Routes */}
             <Route element={<ProtectedRoute allowedRoles={["principal"]} />}>
-              <Route
-                path="/dashboard/principal"
-                element={<PrincipalDashboard />}
-              />
-              <Route
-                path="/dashboard/principal/analytics"
-                element={<SchoolAnalytics />}
-              />
-              <Route
-                path="/dashboard/principal/analytics/:quizId"
-                element={<SchoolAnalytics />}
-              />
+              <Route element={<DashboardLayout />}>
+                <Route
+                  path="/dashboard/principal"
+                  element={<PrincipalDashboard />}
+                />
+                <Route
+                  path="/dashboard/principal/analytics"
+                  element={<SchoolAnalytics />}
+                />
+                <Route
+                  path="/dashboard/principal/analytics/:quizId"
+                  element={<SchoolAnalytics />}
+                />
+              </Route>
             </Route>
 
             {/* Teacher Routes */}
             <Route element={<ProtectedRoute allowedRoles={["teacher"]} />}>
-              <Route path="/dashboard/teacher" element={<TeacherDashboard />} />
-              <Route
-                path="/dashboard/teacher/quizzes"
-                element={<QuizManager />}
-              />
-              <Route
-                path="/dashboard/teacher/quizzes/create"
-                element={<CreateQuiz />}
-              />
+              <Route element={<DashboardLayout />}>
+                <Route path="/dashboard/teacher" element={<TeacherDashboard />} />
+                <Route
+                  path="/dashboard/teacher/quizzes"
+                  element={<QuizManager />}
+                />
+                <Route
+                  path="/dashboard/teacher/quizzes/create"
+                  element={<CreateQuiz />}
+                />
+                <Route
+                  path="/dashboard/teacher/quiz/:id/analytics"
+                  element={<QuizAnalytics />}
+                />
+              </Route>
             </Route>
-            <Route
-              path="/dashboard/teacher/quiz/:id/analytics"
-              element={<QuizAnalytics />}
-            />
 
             {/* Student Routes */}
             <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
-              {/* <Route path="/dashboard/student" element={<StudentDashboard />} /> */}
-              <Route path="/dashboard/student" element={<StudentLobby />} />
-
-              {/* The Game Route */}
+              <Route element={<DashboardLayout />}>
+                <Route path="/dashboard/student" element={<StudentLobby />} />
+              </Route>
+              {/* PlayQuiz does NOT get DashboardLayout — fullscreen secure mode */}
               <Route
                 path="/dashboard/student/quiz/:id"
                 element={<PlayQuiz />}
@@ -80,7 +88,7 @@ function App() {
             </Route>
 
             {/* Fallback */}
-            <Route path="*" element={<Navigate to="/login" />} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </SocketProvider>
       </AuthProvider>
