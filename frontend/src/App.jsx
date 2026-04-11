@@ -16,8 +16,13 @@ import TeacherDashboard from "./pages/dashboards/TeacherDashboard";
 import QuizManager from "./pages/dashboards/teacher-views/QuizManager";
 import CreateQuiz from "./pages/dashboards/teacher-views/CreateQuiz";
 import QuizAnalytics from "./pages/dashboards/teacher-views/QuizAnalytics";
+import GuideManager from "./pages/dashboards/teacher-views/GuideManager";
+import CreateGuide from "./pages/dashboards/teacher-views/CreateGuide";
+import EditGuide from "./pages/dashboards/teacher-views/EditGuide";
 import StudentLobby from "./pages/dashboards/student-views/StudentLobby";
 import PlayQuiz from "./pages/dashboards/student-views/PlayQuiz";
+import StudentGuides from "./pages/dashboards/student-views/StudentGuides";
+import ViewGuide from "./pages/dashboards/student-views/ViewGuide";
 import SchoolAnalytics from "./pages/dashboards/principal-views/SchoolAnalytics";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { SocketProvider } from "./context/SocketContext";
@@ -53,6 +58,14 @@ function App() {
                   path="/dashboard/principal/analytics/:quizId"
                   element={<SchoolAnalytics />}
                 />
+                <Route
+                  path="/dashboard/principal/guides"
+                  element={<StudentGuides />}
+                />
+                <Route
+                  path="/dashboard/principal/guides/:id"
+                  element={<ViewGuide />}
+                />
               </Route>
             </Route>
 
@@ -72,6 +85,22 @@ function App() {
                   path="/dashboard/teacher/quiz/:id/analytics"
                   element={<QuizAnalytics />}
                 />
+                <Route
+                  path="/dashboard/teacher/guides"
+                  element={<GuideManager />}
+                />
+                <Route
+                  path="/dashboard/teacher/guides/create"
+                  element={<CreateGuide />}
+                />
+                <Route
+                  path="/dashboard/teacher/guides/:id"
+                  element={<ViewGuide />}
+                />
+                <Route
+                  path="/dashboard/teacher/guides/:id/edit"
+                  element={<EditGuide />}
+                />
               </Route>
             </Route>
 
@@ -79,6 +108,14 @@ function App() {
             <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
               <Route element={<DashboardLayout />}>
                 <Route path="/dashboard/student" element={<StudentLobby />} />
+                <Route
+                  path="/dashboard/student/guides"
+                  element={<StudentGuides />}
+                />
+                <Route
+                  path="/dashboard/student/guides/:id"
+                  element={<ViewGuide />}
+                />
               </Route>
               {/* PlayQuiz does NOT get DashboardLayout — fullscreen secure mode */}
               <Route
