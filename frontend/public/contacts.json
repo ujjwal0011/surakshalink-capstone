@@ -1,0 +1,159 @@
+{
+  "lastUpdated": "2026-04-11",
+  "categories": [
+    {
+      "id": "universal",
+      "title": "Universal Emergency",
+      "icon": "🚨",
+      "color": "red",
+      "description": "For any life-threatening emergency",
+      "contacts": [
+        {
+          "name": "National Emergency Number",
+          "number": "112",
+          "description": "Single number for all emergencies — police, fire, ambulance. Works even without SIM."
+        },
+        {
+          "name": "Police",
+          "number": "100",
+          "description": "Report crimes, theft, violence, or any law & order situation."
+        },
+        {
+          "name": "Fire Brigade",
+          "number": "101",
+          "description": "Fire emergencies, building collapse, or rescue operations."
+        },
+        {
+          "name": "Ambulance",
+          "number": "102",
+          "description": "Free ambulance service by the Government of India."
+        },
+        {
+          "name": "Emergency Medical Service",
+          "number": "108",
+          "description": "24/7 emergency ambulance and medical aid."
+        }
+      ]
+    },
+    {
+      "id": "medical",
+      "title": "Medical Services",
+      "icon": "🏥",
+      "color": "blue",
+      "description": "Health emergencies and medical assistance",
+      "contacts": [
+        {
+          "name": "Ambulance (Govt.)",
+          "number": "102",
+          "description": "Government-run free ambulance service across India."
+        },
+        {
+          "name": "Emergency Response (EMRI)",
+          "number": "108",
+          "description": "Emergency Management & Research Institute ambulance."
+        },
+        {
+          "name": "Blood Bank Helpline",
+          "number": "104",
+          "description": "Locate nearby blood banks and request blood units."
+        },
+        {
+          "name": "COVID-19 Helpline",
+          "number": "1075",
+          "description": "Ministry of Health helpline for pandemic-related queries."
+        }
+      ]
+    },
+    {
+      "id": "disaster",
+      "title": "Disaster Management",
+      "icon": "🌊",
+      "color": "orange",
+      "description": "Natural disasters and crisis response",
+      "contacts": [
+        {
+          "name": "Disaster Management (NDMA)",
+          "number": "1070",
+          "description": "National Disaster Management Authority helpline for floods, earthquakes, cyclones."
+        },
+        {
+          "name": "Disaster Relief (NDRF)",
+          "number": "1077",
+          "description": "National Disaster Response Force — search, rescue, and relief."
+        }
+      ]
+    },
+    {
+      "id": "safety",
+      "title": "Safety & Protection",
+      "icon": "🛡️",
+      "color": "purple",
+      "description": "Personal safety and women/child protection",
+      "contacts": [
+        {
+          "name": "Women Helpline",
+          "number": "1091",
+          "description": "Report domestic violence, harassment, or seek immediate help."
+        },
+        {
+          "name": "Women Helpline (NCW)",
+          "number": "1098",
+          "description": "National Commission for Women — legal aid and counseling."
+        },
+        {
+          "name": "Women Helpline (Universal)",
+          "number": "181",
+          "description": "Available 24/7. Supports rescue, medical help, and shelter."
+        }
+      ]
+    },
+    {
+      "id": "utilities",
+      "title": "Utilities & Services",
+      "icon": "⚡",
+      "color": "teal",
+      "description": "Gas leaks, electricity, and essential services",
+      "contacts": [
+        {
+          "name": "Gas Leak Emergency",
+          "number": "1906",
+          "description": "Report LPG gas leaks or cylinder-related emergencies."
+        },
+        {
+          "name": "Electricity Complaint",
+          "number": "1912",
+          "description": "Report power outages, electric shocks, or fallen wires."
+        },
+        {
+          "name": "Railway Helpline",
+          "number": "155303",
+          "description": "Indian Railways security and complaint helpline."
+        }
+      ]
+    },
+    {
+      "id": "transport",
+      "title": "Transport & Travel",
+      "icon": "🚆",
+      "color": "green",
+      "description": "Road, rail, and travel emergencies",
+      "contacts": [
+        {
+          "name": "Railway Enquiry",
+          "number": "139",
+          "description": "Train timings, PNR status, and railway information."
+        },
+        {
+          "name": "Road Accident Emergency",
+          "number": "1033",
+          "description": "Report road accidents and request emergency response."
+        },
+        {
+          "name": "Tourist Helpline",
+          "number": "1363",
+          "description": "Assistance for tourists — safety, complaints, and guidance."
+        }
+      ]
+    }
+  ]
+}

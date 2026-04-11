@@ -11,6 +11,7 @@ import Login from "./pages/auth/Login";
 import RegisterPrincipal from "./pages/auth/RegisterPrincipal";
 import RegisterTeacher from "./pages/auth/RegisterTeacher";
 import RegisterStudent from "./pages/auth/RegisterStudent";
+import EmergencyContacts from "./pages/EmergencyContacts";
 import PrincipalDashboard from "./pages/dashboards/PrincipalDashboard";
 import TeacherDashboard from "./pages/dashboards/TeacherDashboard";
 import QuizManager from "./pages/dashboards/teacher-views/QuizManager";
@@ -40,6 +41,7 @@ function App() {
             <Route path="/register-principal" element={<RegisterPrincipal />} />
             <Route path="/register-teacher" element={<RegisterTeacher />} />
             <Route path="/register-student" element={<RegisterStudent />} />
+            <Route path="/emergency-contacts" element={<EmergencyContacts />} />
 
             {/* Protected Routes — Wrapped with DashboardLayout (navbar) */}
 
@@ -65,6 +67,10 @@ function App() {
                 <Route
                   path="/dashboard/principal/guides/:id"
                   element={<ViewGuide />}
+                />
+                <Route
+                  path="/dashboard/principal/emergency-contacts"
+                  element={<EmergencyContacts />}
                 />
               </Route>
             </Route>
@@ -101,6 +107,10 @@ function App() {
                   path="/dashboard/teacher/guides/:id/edit"
                   element={<EditGuide />}
                 />
+                <Route
+                  path="/dashboard/teacher/emergency-contacts"
+                  element={<EmergencyContacts />}
+                />
               </Route>
             </Route>
 
@@ -115,6 +125,10 @@ function App() {
                 <Route
                   path="/dashboard/student/guides/:id"
                   element={<ViewGuide />}
+                />
+                <Route
+                  path="/dashboard/student/emergency-contacts"
+                  element={<EmergencyContacts />}
                 />
               </Route>
               {/* PlayQuiz does NOT get DashboardLayout — fullscreen secure mode */}

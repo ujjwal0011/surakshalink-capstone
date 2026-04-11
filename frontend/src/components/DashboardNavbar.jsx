@@ -21,17 +21,20 @@ const DashboardNavbar = () => {
           { label: 'Dashboard', path: '/dashboard/principal', icon: '🏛️' },
           { label: 'Analytics', path: '/dashboard/principal/analytics', icon: '📊' },
           { label: 'Guides', path: '/dashboard/principal/guides', icon: '📖' },
+          { label: 'Emergency', path: '/dashboard/principal/emergency-contacts', icon: '🆘' },
         ];
       case 'teacher':
         return [
           { label: 'Dashboard', path: '/dashboard/teacher', icon: '📚' },
           { label: 'Quizzes', path: '/dashboard/teacher/quizzes', icon: '📝' },
           { label: 'Guides', path: '/dashboard/teacher/guides', icon: '📖' },
+          { label: 'Emergency', path: '/dashboard/teacher/emergency-contacts', icon: '🆘' },
         ];
       case 'student':
         return [
           { label: 'Drill Lobby', path: '/dashboard/student', icon: '🎮' },
           { label: 'Guides', path: '/dashboard/student/guides', icon: '📖' },
+          { label: 'Emergency', path: '/dashboard/student/emergency-contacts', icon: '🆘' },
         ];
       default:
         return [];
