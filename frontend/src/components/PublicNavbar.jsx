@@ -53,6 +53,13 @@ const PublicNavbar = () => {
               </a>
             ))}
             <Link
+              to="/emergency-contacts"
+              className="flex items-center gap-1.5 text-red-400 hover:text-red-300 font-semibold text-sm transition-colors relative group"
+            >
+              <span>🆘</span> Emergency
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-400 group-hover:w-full transition-all duration-300" />
+            </Link>
+            <Link
               to="/login"
               className="bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-xl font-semibold text-sm border border-white/20 hover:border-white/40 transition-all duration-300 hover:shadow-lg hover:shadow-white/10"
             >
@@ -96,6 +103,13 @@ const PublicNavbar = () => {
                 {link.label}
               </a>
             ))}
+            <Link
+              to="/emergency-contacts"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2 text-red-400 hover:text-red-300 font-semibold py-3 px-4 rounded-lg hover:bg-red-500/10 transition-colors"
+            >
+              <span>🆘</span> Emergency Contacts
+            </Link>
             <div className="border-t border-white/10 mt-3 pt-3 space-y-2">
               <Link
                 to="/login"
