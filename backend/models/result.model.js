@@ -12,11 +12,16 @@ const resultSchema = new mongoose.Schema({
   // Analytics Detail
   correctAnswers: { type: Number, required: true },
   wrongAnswers: { type: Number, required: true },
+  answers: [{ type: Number }],                   // Student's selected option indices per question
   timeTaken: { type: Number }, // seconds used
 
   // Anti-Cheating Data
   violations: { type: Number, default: 0 },          // Tab switches, fullscreen exits, etc.
   terminatedBySystem: { type: Boolean, default: false }, // Was quiz auto-ended due to violations?
+
+  // AI Summary
+  aiSummary: { type: mongoose.Schema.Types.Mixed, default: null },  // Gemini-generated performance analysis
+  aiSummaryGeneratedAt: { type: Date, default: null },
 
   completedAt: { type: Date, default: Date.now }
 });

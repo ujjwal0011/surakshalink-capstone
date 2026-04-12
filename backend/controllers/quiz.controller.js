@@ -1,6 +1,8 @@
+import mongoose from 'mongoose';
 import Quiz from '../models/quiz.model.js';
 import Result from '../models/result.model.js';
 import User from '../models/user.model.js';
+import { generateQuizSummary } from '../services/ai.service.js';
 
 // 1. TEACHER: Create a new Drill/Quiz
 export const createQuiz = async (req, res) => {
@@ -74,11 +76,21 @@ export const submitQuiz = async (req, res) => {
 
     let correctCount = 0;
 
+    // Build per-question detail for the response
+    const questionDetails = [];
+
     // Grade the quiz securely on the server
     quiz.questions.forEach((question, index) => {
-      if (answers[index] === question.correctOptionIndex) {
-        correctCount++;
-      }
+      const isCorrect = answers[index] === question.correctOptionIndex;
+      if (isCorrect) correctCount++;
+
+      questionDetails.push({
+        questionText: question.questionText,
+        options: question.options,
+        studentAnswerIndex: answers[index] !== undefined ? answers[index] : null,
+        correctAnswerIndex: question.correctOptionIndex,
+        isCorrect
+      });
     });
 
     // Calculate XP (Gamification Logic)
@@ -90,6 +102,25 @@ export const submitQuiz = async (req, res) => {
       xpEarned = Math.round(xpEarned * 0.5); // 50% XP penalty
     }
 
+    // Check for previous best attempt (for XP delta calculation)
+    const previousBest = await Result.findOne({
+      studentId: req.user.id,
+      quizId: quiz._id
+    }).sort({ xpEarned: -1 }); // Get highest XP attempt
+
+    let xpToAward = xpEarned;
+    let isReattempt = false;
+
+    if (previousBest) {
+      isReattempt = true;
+      // Only award the difference if new score is higher
+      if (xpEarned > previousBest.xpEarned) {
+        xpToAward = xpEarned - previousBest.xpEarned;
+      } else {
+        xpToAward = 0; // No additional XP if score isn't better
+      }
+    }
+
     // Save the Result
     const newResult = new Result({
       studentId: req.user.id,
@@ -98,6 +129,7 @@ export const submitQuiz = async (req, res) => {
       totalQuestions: quiz.questions.length,
       correctAnswers: correctCount,
       wrongAnswers: quiz.questions.length - correctCount,
+      answers, // Store student's answer selections
       xpEarned,
       timeTaken,
       violations,
@@ -106,19 +138,176 @@ export const submitQuiz = async (req, res) => {
     await newResult.save();
 
     // Update Student Profile (Add XP to their permanent record)
-    // Note: Ensure your User model has a 'totalXP' field (default: 0)
-    await User.findByIdAndUpdate(req.user.id, {
-      $inc: { totalXP: xpEarned }
-    });
+    if (xpToAward > 0) {
+      await User.findByIdAndUpdate(req.user.id, {
+        $inc: { totalXP: xpToAward }
+      });
+    }
 
     res.json({
       message: "Quiz Submitted!",
+      resultId: newResult._id,
       score: percentage * 100,
       xpEarned,
+      xpAwarded: xpToAward, // Actual XP added to profile (may differ on re-attempts)
+      isReattempt,
       correctCount,
-      totalQuestions: quiz.questions.length
+      totalQuestions: quiz.questions.length,
+      questionDetails
     });
 
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// 5. STUDENT: Get Previous Quiz Result
+export const getQuizResult = async (req, res) => {
+  try {
+    const { id } = req.params; // quizId
+
+    // Get the latest result for this student + quiz
+    const result = await Result.findOne({
+      studentId: req.user.id,
+      quizId: id
+    }).sort({ completedAt: -1 });
+
+    if (!result) {
+      return res.json({ attempted: false });
+    }
+
+    // Also fetch the quiz to build question details if we have answers stored
+    const quiz = await Quiz.findById(id);
+    let questionDetails = [];
+
+    if (quiz && result.answers && result.answers.length > 0) {
+      questionDetails = quiz.questions.map((q, i) => ({
+        questionText: q.questionText,
+        options: q.options,
+        studentAnswerIndex: result.answers[i] !== undefined ? result.answers[i] : null,
+        correctAnswerIndex: q.correctOptionIndex,
+        isCorrect: result.answers[i] === q.correctOptionIndex
+      }));
+    }
+
+    // Get best score across all attempts
+    const bestResult = await Result.findOne({
+      studentId: req.user.id,
+      quizId: id
+    }).sort({ score: -1 });
+
+    // Get attempt count
+    const attemptCount = await Result.countDocuments({
+      studentId: req.user.id,
+      quizId: id
+    });
+
+    res.json({
+      attempted: true,
+      result: {
+        _id: result._id,
+        score: result.score,
+        xpEarned: result.xpEarned,
+        correctAnswers: result.correctAnswers,
+        wrongAnswers: result.wrongAnswers,
+        totalQuestions: result.totalQuestions,
+        timeTaken: result.timeTaken,
+        violations: result.violations,
+        terminatedBySystem: result.terminatedBySystem,
+        completedAt: result.completedAt,
+        aiSummary: result.aiSummary,
+        aiSummaryGeneratedAt: result.aiSummaryGeneratedAt,
+        questionDetails
+      },
+      bestScore: bestResult?.score || 0,
+      bestXp: bestResult?.xpEarned || 0,
+      attemptCount
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// 6. STUDENT: Generate AI Summary for a Quiz Result
+export const generateAISummary = async (req, res) => {
+  try {
+    const { id } = req.params; // quizId
+
+    // Get the latest result
+    const result = await Result.findOne({
+      studentId: req.user.id,
+      quizId: id
+    }).sort({ completedAt: -1 });
+
+    if (!result) {
+      return res.status(404).json({ message: "No quiz result found. Take the quiz first." });
+    }
+
+    // If AI summary already exists for this result, return it
+    if (result.aiSummary) {
+      return res.json({
+        summary: result.aiSummary,
+        generatedAt: result.aiSummaryGeneratedAt,
+        cached: true
+      });
+    }
+
+    // Fetch full quiz data (with correct answers) for the AI prompt
+    const quiz = await Quiz.findById(id);
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found." });
+    }
+
+    // Generate AI summary
+    const summary = await generateQuizSummary(quiz, result);
+
+    // Save to database
+    result.aiSummary = summary;
+    result.aiSummaryGeneratedAt = new Date();
+    await result.save();
+
+    res.json({
+      summary,
+      generatedAt: result.aiSummaryGeneratedAt,
+      cached: false
+    });
+  } catch (err) {
+    console.error('AI Summary Error:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// 7. STUDENT: Get results for multiple quizzes (batch — for lobby badges)
+export const getMyResults = async (req, res) => {
+  try {
+    // Get the best result for each quiz this student has attempted
+    const userId = new mongoose.Types.ObjectId(req.user.id);
+    const results = await Result.aggregate([
+      { $match: { studentId: userId } },
+      { $sort: { score: -1 } },
+      {
+        $group: {
+          _id: '$quizId',
+          bestScore: { $first: '$score' },
+          bestXp: { $first: '$xpEarned' },
+          attemptCount: { $sum: 1 },
+          lastAttempt: { $first: '$completedAt' }
+        }
+      }
+    ]);
+
+    // Convert to a simple map: quizId -> { bestScore, bestXp, attemptCount }
+    const resultsMap = {};
+    results.forEach(r => {
+      resultsMap[r._id.toString()] = {
+        bestScore: r.bestScore,
+        bestXp: r.bestXp,
+        attemptCount: r.attemptCount,
+        lastAttempt: r.lastAttempt
+      };
+    });
+
+    res.json(resultsMap);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

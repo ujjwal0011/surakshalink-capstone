@@ -11,6 +11,12 @@ const PlayQuiz = () => {
   const [quizData, setQuizData] = useState(null);
   const violationsRef = useRef(0);
 
+  // AI Summary state
+  const [aiSummary, setAiSummary] = useState(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState(null);
+  const [showQuestionDetails, setShowQuestionDetails] = useState(false);
+
   // Fetch Quiz Data
   useEffect(() => {
     const loadQuiz = async () => {
@@ -58,11 +64,167 @@ const PlayQuiz = () => {
     return () => secure.exitSecureMode();
   }, [game.gameState]);
 
+  // Load cached AI summary if previous result has one
+  useEffect(() => {
+    if (game.previousResult?.result?.aiSummary) {
+      setAiSummary(game.previousResult.result.aiSummary);
+    }
+  }, [game.previousResult]);
+
+  // Generate AI Summary
+  const handleGenerateAISummary = async () => {
+    setAiLoading(true);
+    setAiError(null);
+    try {
+      const { data } = await api.post(`/quiz/${id}/ai-summary`);
+      setAiSummary(data.summary);
+    } catch (error) {
+      setAiError(error.response?.data?.error || 'Failed to generate AI summary. Please try again.');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   // --- LOADING ---
   if (!quizData || game.gameState === 'LOADING') {
     return (
-      <div className="min-h-screen flex items-center justify-center font-bold text-gray-400">
-        LOADING MISSION DATA...
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block h-12 w-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="font-bold text-gray-400 tracking-widest uppercase">Loading Mission Data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // --- PREVIOUS ATTEMPT SCREEN ---
+  if (game.gameState === 'PREVIOUS_ATTEMPT' && game.previousResult) {
+    const prev = game.previousResult;
+    const result = prev.result;
+    const scoreColor = result.score >= 80 ? 'green' : result.score >= 50 ? 'yellow' : 'red';
+
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+        <div className="max-w-2xl w-full">
+          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-8 text-white text-center">
+              <div className="text-5xl mb-3">📊</div>
+              <h1 className="text-2xl font-black tracking-tight">{quizData.title}</h1>
+              <p className="text-indigo-200 text-sm mt-2">You've attempted this quiz before</p>
+            </div>
+
+            {/* Previous Attempt Stats */}
+            <div className="p-8">
+              <div className="flex items-center gap-2 mb-6">
+                <span className="h-2 w-2 bg-indigo-500 rounded-full"></span>
+                <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest">Previous Attempt Results</h3>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div className={`bg-${scoreColor}-50 rounded-2xl p-4 text-center`} style={{
+                  backgroundColor: scoreColor === 'green' ? '#f0fdf4' : scoreColor === 'yellow' ? '#fefce8' : '#fef2f2'
+                }}>
+                  <span className="block text-3xl font-black" style={{
+                    color: scoreColor === 'green' ? '#16a34a' : scoreColor === 'yellow' ? '#ca8a04' : '#dc2626'
+                  }}>{Math.round(result.score)}%</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Score</span>
+                </div>
+                <div className="bg-blue-50 rounded-2xl p-4 text-center">
+                  <span className="block text-3xl font-black text-blue-600">{result.xpEarned}</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400">XP Earned</span>
+                </div>
+                <div className="bg-purple-50 rounded-2xl p-4 text-center">
+                  <span className="block text-3xl font-black text-purple-600">{prev.attemptCount}</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Attempts</span>
+                </div>
+                <div className="bg-gray-50 rounded-2xl p-4 text-center">
+                  <span className="block text-3xl font-black text-gray-600">{result.correctAnswers}/{result.totalQuestions}</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Correct</span>
+                </div>
+              </div>
+
+              {/* Best Score Banner */}
+              {prev.attemptCount > 1 && (
+                <div className="bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 rounded-xl p-4 mb-6 flex items-center gap-3">
+                  <span className="text-2xl">🏆</span>
+                  <div>
+                    <span className="font-bold text-yellow-800 text-sm">Best Score: {Math.round(prev.bestScore)}%</span>
+                    <span className="text-yellow-600 text-xs ml-2">({prev.bestXp} XP)</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Completed At */}
+              <div className="text-center text-gray-400 text-xs mb-8">
+                Last attempted on {new Date(result.completedAt).toLocaleDateString('en-IN', {
+                  day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                })}
+              </div>
+
+              {/* AI Summary Section (if cached) */}
+              {aiSummary && (
+                <AISummaryCard summary={aiSummary} />
+              )}
+
+              {/* Question Details Toggle */}
+              {result.questionDetails && result.questionDetails.length > 0 && (
+                <div className="mb-6">
+                  <button
+                    onClick={() => setShowQuestionDetails(!showQuestionDetails)}
+                    className="w-full text-left p-4 rounded-xl border-2 border-gray-100 hover:border-indigo-200 transition-all duration-200 flex items-center justify-between"
+                  >
+                    <span className="font-bold text-gray-700 flex items-center gap-2">
+                      📋 Question Breakdown
+                    </span>
+                    <span className="text-gray-400 text-xl">{showQuestionDetails ? '−' : '+'}</span>
+                  </button>
+                  {showQuestionDetails && (
+                    <QuestionBreakdown questions={result.questionDetails} />
+                  )}
+                </div>
+              )}
+
+              {/* Generate AI Summary Button (if not cached) */}
+              {!aiSummary && (
+                <button
+                  onClick={handleGenerateAISummary}
+                  disabled={aiLoading}
+                  className="w-full mb-4 bg-gradient-to-r from-violet-500 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:from-violet-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-purple-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-3"
+                >
+                  {aiLoading ? (
+                    <>
+                      <span className="inline-block h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                      Analyzing with AI...
+                    </>
+                  ) : (
+                    <>✨ Summarize with AI</>
+                  )}
+                </button>
+              )}
+
+              {aiError && (
+                <div className="mb-4 bg-red-50 border border-red-200 rounded-xl p-4 text-red-600 text-sm">
+                  {aiError}
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <button
+                onClick={() => game.setGameState('INSTRUCTIONS')}
+                className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 rounded-xl font-black text-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-200 flex items-center justify-center gap-2"
+              >
+                🔄 Attempt Again
+              </button>
+              <button
+                onClick={() => navigate('/dashboard/student')}
+                className="w-full mt-3 text-gray-400 py-2 text-sm font-medium hover:text-gray-600 transition-colors"
+              >
+                ← Back to Lobby
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -79,6 +241,20 @@ const PlayQuiz = () => {
               <h1 className="text-2xl font-black tracking-tight">SECURE EXAM MODE</h1>
               <p className="text-red-100 text-sm mt-1">Read all instructions carefully before starting</p>
             </div>
+
+            {/* Re-attempt Notice */}
+            {game.previousResult && (
+              <div className="mx-6 mt-6 bg-indigo-50 border-2 border-indigo-200 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-indigo-600 text-lg">🔄</span>
+                  <span className="font-bold text-indigo-800 text-sm">Re-attempt Mode</span>
+                </div>
+                <p className="text-indigo-600 text-xs leading-relaxed">
+                  Your previous best: <strong>{Math.round(game.previousResult.bestScore)}%</strong> ({game.previousResult.bestXp} XP).
+                  Additional XP will only be awarded if you score higher.
+                </p>
+              </div>
+            )}
 
             {/* Quiz Info */}
             <div className="p-6 border-b border-gray-100">
@@ -172,45 +348,131 @@ const PlayQuiz = () => {
   if (game.gameState === 'FINISHED') {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
-        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl">
-          <div className="text-6xl mb-4">{game.terminatedBySystem ? '⛔' : '🎉'}</div>
-          <h2 className="text-3xl font-black text-gray-900 mb-2">
-            {game.terminatedBySystem ? 'QUIZ TERMINATED' : 'MISSION COMPLETE'}
-          </h2>
-          <p className="text-gray-500 mb-8">
-            {game.terminatedBySystem
-              ? 'Your quiz was auto-submitted due to too many violations.'
-              : 'Your results have been submitted.'}
-          </p>
-
-          <div className={`rounded-xl p-6 mb-4 ${game.terminatedBySystem ? 'bg-red-50' : 'bg-blue-50'}`}>
-            <span className={`block font-bold text-sm tracking-wider uppercase ${game.terminatedBySystem ? 'text-red-600' : 'text-blue-600'}`}>
-              Your Score
-            </span>
-            <span className={`block text-5xl font-black mt-2 ${game.terminatedBySystem ? 'text-red-700' : 'text-blue-700'}`}>
-              {game.score}%
-            </span>
-          </div>
-
-          {/* Violation Summary */}
-          {secure.violations > 0 && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6 text-left">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-yellow-600">⚠️</span>
-                <span className="font-bold text-yellow-800 text-sm">Violations Recorded: {secure.violations}</span>
-              </div>
-              <p className="text-yellow-600 text-xs">
-                Tab switches, fullscreen exits, and other infractions are reported to your teacher.
+        <div className="max-w-2xl w-full">
+          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div className={`p-8 text-center ${game.terminatedBySystem 
+              ? 'bg-gradient-to-r from-red-600 to-red-500' 
+              : 'bg-gradient-to-r from-emerald-500 to-teal-600'}`}
+            >
+              <div className="text-6xl mb-4">{game.terminatedBySystem ? '⛔' : '🎉'}</div>
+              <h2 className="text-3xl font-black text-white mb-2">
+                {game.terminatedBySystem ? 'QUIZ TERMINATED' : 'MISSION COMPLETE'}
+              </h2>
+              <p className="text-white/80">
+                {game.terminatedBySystem
+                  ? 'Your quiz was auto-submitted due to too many violations.'
+                  : 'Your results have been submitted.'}
               </p>
             </div>
-          )}
 
-          <button
-            onClick={() => navigate('/dashboard/student')}
-            className="w-full bg-gray-900 text-white py-4 rounded-xl font-bold text-lg hover:scale-[1.02] transition-transform"
-          >
-            RETURN TO BASE
-          </button>
+            <div className="p-8">
+              {/* Score & XP Cards */}
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className={`rounded-2xl p-6 text-center ${game.terminatedBySystem ? 'bg-red-50' : 'bg-blue-50'}`}>
+                  <span className={`block font-bold text-sm tracking-wider uppercase ${game.terminatedBySystem ? 'text-red-600' : 'text-blue-600'}`}>
+                    Your Score
+                  </span>
+                  <span className={`block text-5xl font-black mt-2 ${game.terminatedBySystem ? 'text-red-700' : 'text-blue-700'}`}>
+                    {Math.round(game.score)}%
+                  </span>
+                </div>
+                <div className="bg-yellow-50 rounded-2xl p-6 text-center">
+                  <span className="block font-bold text-sm tracking-wider uppercase text-yellow-600">
+                    XP Earned
+                  </span>
+                  <span className="block text-5xl font-black mt-2 text-yellow-700">
+                    {game.xpEarned}
+                  </span>
+                  {game.isReattempt && (
+                    <span className="block text-xs text-yellow-500 mt-1">
+                      +{game.xpAwarded} XP added to profile
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Re-attempt Badge */}
+              {game.isReattempt && (
+                <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-6 flex items-center gap-3">
+                  <span className="text-xl">🔄</span>
+                  <div>
+                    <span className="font-bold text-indigo-800 text-sm">Re-attempt</span>
+                    <p className="text-indigo-600 text-xs">
+                      {game.xpAwarded > 0
+                        ? `You improved! +${game.xpAwarded} additional XP awarded.`
+                        : `Score this attempt: ${Math.round(game.score)}%. No additional XP (didn't beat your best).`}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Violation Summary */}
+              {secure.violations > 0 && (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-yellow-600">⚠️</span>
+                    <span className="font-bold text-yellow-800 text-sm">Violations Recorded: {secure.violations}</span>
+                  </div>
+                  <p className="text-yellow-600 text-xs">
+                    Tab switches, fullscreen exits, and other infractions are reported to your teacher.
+                  </p>
+                </div>
+              )}
+
+              {/* Question Details Toggle */}
+              {game.questionDetails.length > 0 && (
+                <div className="mb-6">
+                  <button
+                    onClick={() => setShowQuestionDetails(!showQuestionDetails)}
+                    className="w-full text-left p-4 rounded-xl border-2 border-gray-100 hover:border-blue-200 transition-all duration-200 flex items-center justify-between"
+                  >
+                    <span className="font-bold text-gray-700 flex items-center gap-2">
+                      📋 View Question Breakdown ({game.questionDetails.filter(q => q.isCorrect).length}/{game.questionDetails.length} correct)
+                    </span>
+                    <span className="text-gray-400 text-xl">{showQuestionDetails ? '−' : '+'}</span>
+                  </button>
+                  {showQuestionDetails && (
+                    <QuestionBreakdown questions={game.questionDetails} />
+                  )}
+                </div>
+              )}
+
+              {/* AI Summary Section */}
+              {aiSummary ? (
+                <AISummaryCard summary={aiSummary} />
+              ) : (
+                <button
+                  onClick={handleGenerateAISummary}
+                  disabled={aiLoading}
+                  className="w-full mb-4 bg-gradient-to-r from-violet-500 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:from-violet-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-purple-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-3"
+                >
+                  {aiLoading ? (
+                    <>
+                      <span className="inline-block h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                      Analyzing with AI...
+                    </>
+                  ) : (
+                    <>✨ Summarize with AI</>
+                  )}
+                </button>
+              )}
+
+              {aiError && (
+                <div className="mb-4 bg-red-50 border border-red-200 rounded-xl p-4 text-red-600 text-sm">
+                  {aiError}
+                </div>
+              )}
+
+              {/* Return Button */}
+              <button
+                onClick={() => navigate('/dashboard/student')}
+                className="w-full bg-gray-900 text-white py-4 rounded-xl font-bold text-lg hover:scale-[1.02] transition-transform"
+              >
+                RETURN TO BASE
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -232,5 +494,172 @@ const PlayQuiz = () => {
     </div>
   );
 };
+
+// ===== SUB-COMPONENTS =====
+
+// Question Breakdown Component
+const QuestionBreakdown = ({ questions }) => (
+  <div className="mt-3 space-y-3">
+    {questions.map((q, i) => (
+      <div
+        key={i}
+        className={`p-4 rounded-xl border-2 transition-all ${
+          q.isCorrect
+            ? 'border-green-100 bg-green-50/50'
+            : 'border-red-100 bg-red-50/50'
+        }`}
+      >
+        <div className="flex items-start gap-3">
+          <span className={`flex-shrink-0 h-7 w-7 rounded-full flex items-center justify-center text-sm font-black ${
+            q.isCorrect ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+          }`}>
+            {q.isCorrect ? '✓' : '✗'}
+          </span>
+          <div className="flex-1 min-w-0">
+            <p className="font-bold text-gray-800 text-sm mb-2">
+              Q{i + 1}: {q.questionText}
+            </p>
+            <div className="space-y-1">
+              {q.options.map((opt, optIdx) => {
+                const isStudentAnswer = optIdx === q.studentAnswerIndex;
+                const isCorrectAnswer = optIdx === q.correctAnswerIndex;
+
+                let style = 'text-gray-500 text-xs';
+                let icon = '';
+                if (isCorrectAnswer) {
+                  style = 'text-green-700 font-bold text-xs bg-green-100 px-2 py-1 rounded-lg';
+                  icon = '✅ ';
+                } else if (isStudentAnswer && !q.isCorrect) {
+                  style = 'text-red-600 font-bold text-xs bg-red-100 px-2 py-1 rounded-lg line-through';
+                  icon = '❌ ';
+                }
+
+                return (
+                  <div key={optIdx} className={style}>
+                    {icon}{String.fromCharCode(65 + optIdx)}) {opt}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
+// AI Summary Card Component
+const AISummaryCard = ({ summary }) => (
+  <div className="mb-6 bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50 rounded-2xl border-2 border-purple-100 overflow-hidden">
+    {/* Header */}
+    <div className="bg-gradient-to-r from-violet-600 to-purple-600 px-6 py-4 flex items-center gap-3">
+      <span className="text-2xl">🤖</span>
+      <div>
+        <h3 className="text-white font-black text-lg">AI Performance Analysis</h3>
+        <p className="text-purple-200 text-xs">Powered by Google Gemini</p>
+      </div>
+    </div>
+
+    <div className="p-6 space-y-5">
+      {/* Overall Assessment */}
+      <div>
+        <h4 className="font-bold text-purple-800 text-sm mb-2 flex items-center gap-2">
+          📝 Overall Assessment
+        </h4>
+        <p className="text-gray-700 text-sm leading-relaxed bg-white/60 rounded-xl p-4">
+          {summary.overallAssessment}
+        </p>
+      </div>
+
+      {/* Strong & Weak Topics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {summary.strongTopics && summary.strongTopics.length > 0 && (
+          <div className="bg-green-50/80 rounded-xl p-4 border border-green-100">
+            <h4 className="font-bold text-green-800 text-sm mb-2 flex items-center gap-2">
+              💪 Strong Areas
+            </h4>
+            <ul className="space-y-1">
+              {summary.strongTopics.map((topic, i) => (
+                <li key={i} className="text-green-700 text-xs flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 bg-green-500 rounded-full flex-shrink-0"></span>
+                  {topic}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {summary.weakTopics && summary.weakTopics.length > 0 && (
+          <div className="bg-red-50/80 rounded-xl p-4 border border-red-100">
+            <h4 className="font-bold text-red-800 text-sm mb-2 flex items-center gap-2">
+              📚 Topics to Focus On
+            </h4>
+            <ul className="space-y-1">
+              {summary.weakTopics.map((topic, i) => (
+                <li key={i} className="text-red-700 text-xs flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 bg-red-500 rounded-full flex-shrink-0"></span>
+                  {topic}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      {/* Wrong Answer Analysis */}
+      {summary.wrongAnswerAnalysis && summary.wrongAnswerAnalysis.length > 0 && (
+        <div>
+          <h4 className="font-bold text-purple-800 text-sm mb-3 flex items-center gap-2">
+            🔍 Wrong Answer Analysis
+          </h4>
+          <div className="space-y-3">
+            {summary.wrongAnswerAnalysis.map((item, i) => (
+              <div key={i} className="bg-white/70 rounded-xl p-4 border border-purple-100">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="bg-purple-100 text-purple-700 text-xs font-bold px-2 py-0.5 rounded-full">
+                    Q{item.questionNumber}
+                  </span>
+                  <span className="text-purple-600 text-xs font-medium">{item.topic}</span>
+                </div>
+                <p className="text-gray-600 text-xs leading-relaxed">{item.explanation}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Recommendations */}
+      {summary.recommendations && summary.recommendations.length > 0 && (
+        <div>
+          <h4 className="font-bold text-purple-800 text-sm mb-2 flex items-center gap-2">
+            💡 Recommendations
+          </h4>
+          <ul className="space-y-2">
+            {summary.recommendations.map((rec, i) => (
+              <li key={i} className="text-gray-700 text-xs flex items-start gap-2 bg-white/60 rounded-lg p-3">
+                <span className="text-purple-500 font-bold">{i + 1}.</span>
+                {rec}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Encouragement */}
+      {summary.encouragement && (
+        <div className="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-xl p-4 border border-amber-200 text-center">
+          <span className="text-2xl mb-2 block">🌟</span>
+          <p className="text-amber-800 text-sm font-medium italic">{summary.encouragement}</p>
+        </div>
+      )}
+
+      {/* Fallback notice */}
+      {summary._fallback && (
+        <p className="text-gray-400 text-xs text-center italic">
+          AI service unavailable. Showing basic summary.
+        </p>
+      )}
+    </div>
+  </div>
+);
 
 export default PlayQuiz;

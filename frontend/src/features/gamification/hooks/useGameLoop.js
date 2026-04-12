@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 export const useGameLoop = (quizId, quizData) => {
   const navigate = useNavigate();
 
-  // Game State: LOADING → INSTRUCTIONS → PLAYING → FINISHED
+  // Game State: LOADING → INSTRUCTIONS (or PREVIOUS_ATTEMPT) → PLAYING → FINISHED
   const [gameState, setGameState] = useState('LOADING');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
@@ -14,6 +14,14 @@ export const useGameLoop = (quizId, quizData) => {
   const [streak, setStreak] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [terminatedBySystem, setTerminatedBySystem] = useState(false);
+
+  // New state for enhanced features
+  const [xpEarned, setXpEarned] = useState(0);
+  const [xpAwarded, setXpAwarded] = useState(0);
+  const [isReattempt, setIsReattempt] = useState(false);
+  const [questionDetails, setQuestionDetails] = useState([]);
+  const [resultId, setResultId] = useState(null);
+  const [previousResult, setPreviousResult] = useState(null);
 
   const timerRef = useRef(null);
   const answersRef = useRef([]);
@@ -23,18 +31,44 @@ export const useGameLoop = (quizId, quizData) => {
     answersRef.current = answers;
   }, [answers]);
 
-  // Initialize Game when data loads → go to INSTRUCTIONS (not PLAYING)
+  // Initialize Game when data loads — check for previous attempt first
   useEffect(() => {
     if (quizData) {
       setTimeLeft(quizData.timeLimit);
-      setGameState('INSTRUCTIONS');
+      checkPreviousAttempt();
     }
   }, [quizData]);
 
-  // Start quiz (called from the Instructions screen)
+  // Check if student has previously attempted this quiz
+  const checkPreviousAttempt = async () => {
+    try {
+      const { data } = await api.get(`/quiz/${quizId}/result`);
+      if (data.attempted) {
+        setPreviousResult(data);
+        setGameState('PREVIOUS_ATTEMPT');
+      } else {
+        setGameState('INSTRUCTIONS');
+      }
+    } catch (error) {
+      // If the check fails, just show instructions
+      setGameState('INSTRUCTIONS');
+    }
+  };
+
+  // Start quiz (called from the Instructions or Previous Attempt screen)
   const startQuiz = useCallback(() => {
+    // Reset state for a fresh attempt
+    setCurrentQuestionIndex(0);
+    setAnswers([]);
+    setScore(0);
+    setXpEarned(0);
+    setXpAwarded(0);
+    setQuestionDetails([]);
+    setResultId(null);
+    setTerminatedBySystem(false);
+    setTimeLeft(quizData?.timeLimit || 60);
     setGameState('PLAYING');
-  }, []);
+  }, [quizData]);
 
   // The Timer Loop
   useEffect(() => {
@@ -93,6 +127,11 @@ export const useGameLoop = (quizId, quizData) => {
 
       const { data } = await api.post('/quiz/submit', payload);
       setScore(data.score);
+      setXpEarned(data.xpEarned);
+      setXpAwarded(data.xpAwarded);
+      setIsReattempt(data.isReattempt);
+      setQuestionDetails(data.questionDetails || []);
+      setResultId(data.resultId);
       return data;
     } catch (error) {
       toast.error("Failed to submit quiz");
@@ -101,6 +140,7 @@ export const useGameLoop = (quizId, quizData) => {
 
   return {
     gameState,
+    setGameState, // Exposed so PlayQuiz can transition from PREVIOUS_ATTEMPT → INSTRUCTIONS
     currentQuestionIndex,
     currentQuestion: quizData?.questions[currentQuestionIndex],
     timeLeft,
@@ -112,5 +152,12 @@ export const useGameLoop = (quizId, quizData) => {
     startQuiz,
     forceEndGame,
     terminatedBySystem,
+    // New returns
+    xpEarned,
+    xpAwarded,
+    isReattempt,
+    questionDetails,
+    resultId,
+    previousResult,
   };
 };
