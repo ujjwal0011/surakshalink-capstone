@@ -26,6 +26,31 @@ export const createQuiz = async (req, res) => {
   }
 };
 
+// 1.1 TEACHER: Delete a Quiz
+export const deleteQuiz = async (req, res) => {
+  try {
+    const quiz = await Quiz.findById(req.params.id);
+    
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
+    // Ensure only the creator or admin can delete
+    if (quiz.createdBy.toString() !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ message: "Not authorized to delete this quiz" });
+    }
+
+    await Quiz.findByIdAndDelete(req.params.id);
+    
+    // Also delete associated results
+    await Result.deleteMany({ quizId: req.params.id });
+
+    res.json({ message: "Quiz deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // 2. STUDENT: Get All Quizzes (The Lobby)
 export const getQuizzes = async (req, res) => {
   try {

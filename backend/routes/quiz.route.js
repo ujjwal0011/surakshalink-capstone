@@ -1,11 +1,12 @@
 import express from 'express';
-import { createQuiz, getQuizzes, getQuizById, submitQuiz, getQuizResult, generateAISummary, getMyResults } from '../controllers/quiz.controller.js';
+import { createQuiz, deleteQuiz, getQuizzes, getQuizById, submitQuiz, getQuizResult, generateAISummary, getMyResults } from '../controllers/quiz.controller.js';
 import auth from '../middlewares/auth.middleware.js'; // Using your existing auth middleware
 
 const router = express.Router();
 
 // Teacher Endpoint
 router.post('/create', auth, createQuiz); // POST /api/quiz/create
+router.delete('/:id', auth, deleteQuiz); // DELETE /api/quiz/:id
 
 // Student Endpoints
 router.get('/', auth, getQuizzes);                 // GET /api/quiz (The Lobby)

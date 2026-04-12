@@ -20,6 +20,21 @@ const QuizManager = () => {
     fetchQuizzes();
   }, []);
 
+  const handleDelete = async (quizId) => {
+    if (!window.confirm("Are you sure you want to delete this quiz? This cannot be undone and will delete all student results for this quiz.")) {
+      return;
+    }
+
+    try {
+      await api.delete(`/quiz/${quizId}`);
+      // Remove from UI
+      setQuizzes(quizzes.filter(q => q._id !== quizId));
+    } catch (error) {
+      console.error("Failed to delete quiz:", error);
+      alert(error.response?.data?.message || "Failed to delete quiz");
+    }
+  };
+
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center mb-8">
@@ -84,13 +99,20 @@ const QuizManager = () => {
                 <span className="text-xs font-semibold text-gray-500">
                   ACTIVE
                 </span>
-                {/* This button will be linked to analytics later */}
-                <Link
-                  to={`/dashboard/teacher/quiz/${quiz._id}/analytics`}
-                  className="text-blue-600 text-sm font-bold hover:underline"
-                >
-                  View Analytics
-                </Link>
+                <div className="flex space-x-4 items-center">
+                  <button
+                    onClick={() => handleDelete(quiz._id)}
+                    className="text-red-500 text-sm font-bold hover:text-red-700 transition"
+                  >
+                    Delete
+                  </button>
+                  <Link
+                    to={`/dashboard/teacher/quiz/${quiz._id}/analytics`}
+                    className="text-blue-600 text-sm font-bold hover:underline"
+                  >
+                    View Analytics
+                  </Link>
+                </div>
               </div>
             </div>
           ))}
