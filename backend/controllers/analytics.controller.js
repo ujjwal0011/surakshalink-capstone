@@ -63,12 +63,17 @@ export const getSchoolAnalytics = async (req, res) => {
   try {
     const { quizId } = req.params;
 
+    // Fetch Quiz info
+    const quiz = await Quiz.findById(quizId);
+    if (!quiz) return res.status(404).json({ message: "Quiz not found" });
+
     // Fetch all results, populate Student AND their Teacher
     const results = await Result.find({ quizId })
       .populate({
         path: 'studentId',
         populate: { path: 'teacherId', select: 'name' } // Get Teacher Name
-      });
+      })
+      .sort({ score: -1 }); // Sort by highest score
 
     // Group By Teacher
     const classGroups = {};
@@ -90,14 +95,46 @@ export const getSchoolAnalytics = async (req, res) => {
     });
 
     // Calculate Averages per Class
-    const comparisonData = Object.values(classGroups).map(group => ({
+    const classComparisons = Object.values(classGroups).map(group => ({
       teacher: group.teacher,
       avgScore: Math.round(group.scores.reduce((a, b) => a + b, 0) / group.scores.length),
       totalStudents: group.scores.length,
       totalXP: group.totalXP
     }));
+    
+    if (results.length === 0) {
+      return res.json({ 
+        quizTitle: quiz.title, 
+        schoolStats: null, 
+        classComparisons: [],
+        leaderboard: [] 
+      });
+    }
 
-    res.json(comparisonData);
+    // Calculate School Stats
+    const totalStudents = results.length;
+    const totalScore = results.reduce((acc, curr) => acc + curr.score, 0);
+    const avgScore = Math.round(totalScore / totalStudents);
+    const passCount = results.filter(r => r.score >= 40).length;
+
+    res.json({
+      quizTitle: quiz.title,
+      schoolStats: {
+        totalStudents,
+        avgScore,
+        passRate: Math.round((passCount / totalStudents) * 100),
+        topScore: results[0].score
+      },
+      classComparisons,
+      leaderboard: results.map(r => ({
+        _id: r._id,
+        name: r.studentId?.name || 'Unknown',
+        teacherName: r.studentId?.teacherId?.name || 'Unknown',
+        score: r.score,
+        xp: r.xpEarned,
+        timeTaken: r.timeTaken
+      }))
+    });
 
   } catch (err) {
     res.status(500).json({ error: err.message });

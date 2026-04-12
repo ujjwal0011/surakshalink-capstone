@@ -145,7 +145,7 @@ const PrincipalDashboard = () => {
               >
                 🏃 CONDUCT DRILL
               </button>
-              // ... inside the Left Column (Controls) ...
+
               <div className="bg-white rounded-xl shadow-sm p-6 mt-6 border border-gray-200">
                 <h2 className="text-lg font-bold text-gray-800 mb-2">
                   📊 Data & Reports
@@ -171,9 +171,8 @@ const PrincipalDashboard = () => {
             </h3>
             <div className="flex items-end mt-2">
               <span
-                className={`text-6xl font-black ${
-                  activeAlert ? "text-green-400" : "text-gray-500"
-                }`}
+                className={`text-6xl font-black ${activeAlert ? "text-green-400" : "text-gray-500"
+                  }`}
               >
                 {totalSafe}
               </span>
@@ -185,9 +184,8 @@ const PrincipalDashboard = () => {
               <div
                 className="bg-green-500 h-full transition-all duration-500"
                 style={{
-                  width: `${
-                    totalStudents ? (totalSafe / totalStudents) * 100 : 0
-                  }%`,
+                  width: `${totalStudents ? (totalSafe / totalStudents) * 100 : 0
+                    }%`,
                 }}
               ></div>
             </div>
@@ -217,11 +215,10 @@ const PrincipalDashboard = () => {
                       {teacherName}'s Class
                     </h4>
                     <span
-                      className={`text-sm font-bold px-2 py-1 rounded ${
-                        stats.safe === stats.total
+                      className={`text-sm font-bold px-2 py-1 rounded ${stats.safe === stats.total
                           ? "bg-green-100 text-green-700"
                           : "bg-yellow-50 text-yellow-700"
-                      }`}
+                        }`}
                     >
                       {stats.safe} / {stats.total} Safe
                     </span>
@@ -230,11 +227,10 @@ const PrincipalDashboard = () => {
                   {/* Progress Bar for this specific class */}
                   <div className="w-full bg-gray-100 rounded-full h-2.5 mb-3">
                     <div
-                      className={`h-2.5 rounded-full ${
-                        stats.safe === stats.total
+                      className={`h-2.5 rounded-full ${stats.safe === stats.total
                           ? "bg-green-500"
                           : "bg-yellow-400"
-                      }`}
+                        }`}
                       style={{ width: `${(stats.safe / stats.total) * 100}%` }}
                     ></div>
                   </div>
