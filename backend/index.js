@@ -10,6 +10,7 @@ import userRoutes from './routes/user.route.js';
 import quizRoutes from './routes/quiz.route.js';
 import analyticsRoutes from './routes/analytics.route.js';
 import guideRoutes from './routes/guide.route.js';
+import shopRoutes from './routes/shop.route.js';
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/quiz', quizRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/guides', guideRoutes);
+app.use('/api/shop', shopRoutes);
 
 const io = new Server(server, {
   cors: {

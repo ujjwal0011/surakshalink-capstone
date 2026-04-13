@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema({
 
   totalXP: { type: Number, default: 0 },
 
+  // Gamification: Items purchased from the Go-Bag Shop
+  ownedItems: [{ type: String }],
+
   createdAt: { type: Date, default: Date.now },
 });
 

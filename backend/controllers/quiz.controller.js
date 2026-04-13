@@ -120,11 +120,30 @@ export const submitQuiz = async (req, res) => {
 
     // Calculate XP (Gamification Logic)
     const percentage = correctCount / quiz.questions.length;
-    let xpEarned = Math.round(percentage * quiz.xpReward);
+    let baseXP = Math.round(percentage * quiz.xpReward);
+
+    // --- XP BONUS SYSTEM ---
+    let speedBonus = 0;
+    let integrityBonus = 0;
+
+    // Speed Bonus: 20% extra if finished in under 50% of the time limit
+    const timeUsedPercent = timeTaken / quiz.timeLimit;
+    if (timeUsedPercent <= 0.5 && percentage >= 0.5) {
+      speedBonus = Math.round(baseXP * 0.2);
+    }
+
+    // Integrity Bonus: 10% extra if zero violations and not terminated
+    if (violations === 0 && !terminatedBySystem) {
+      integrityBonus = Math.round(baseXP * 0.1);
+    }
+
+    let xpEarned = baseXP + speedBonus + integrityBonus;
 
     // Penalty: Reduce XP if quiz was terminated due to violations
     if (terminatedBySystem) {
-      xpEarned = Math.round(xpEarned * 0.5); // 50% XP penalty
+      xpEarned = Math.round(baseXP * 0.5); // 50% XP penalty (no bonuses)
+      speedBonus = 0;
+      integrityBonus = 0;
     }
 
     // Check for previous best attempt (for XP delta calculation)
@@ -178,7 +197,14 @@ export const submitQuiz = async (req, res) => {
       isReattempt,
       correctCount,
       totalQuestions: quiz.questions.length,
-      questionDetails
+      questionDetails,
+      // Bonus breakdown for UI
+      bonuses: {
+        baseXP,
+        speedBonus,
+        integrityBonus,
+        penaltyApplied: terminatedBySystem
+      }
     });
 
   } catch (err) {

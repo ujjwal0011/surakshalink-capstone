@@ -24,6 +24,7 @@ import StudentLobby from "./pages/dashboards/student-views/StudentLobby";
 import PlayQuiz from "./pages/dashboards/student-views/PlayQuiz";
 import StudentGuides from "./pages/dashboards/student-views/StudentGuides";
 import ViewGuide from "./pages/dashboards/student-views/ViewGuide";
+import StudentShop from "./pages/dashboards/student-views/StudentShop";
 import SchoolAnalytics from "./pages/dashboards/principal-views/SchoolAnalytics";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { SocketProvider } from "./context/SocketContext";
@@ -125,6 +126,10 @@ function App() {
                 <Route
                   path="/dashboard/student/guides/:id"
                   element={<ViewGuide />}
+                />
+                <Route
+                  path="/dashboard/student/shop"
+                  element={<StudentShop />}
                 />
                 <Route
                   path="/dashboard/student/emergency-contacts"

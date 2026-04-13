@@ -313,7 +313,7 @@ const PlayQuiz = () => {
             </div>
 
             {/* Warning Box */}
-            <div className="mx-6 mb-6 bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
+            <div className="mx-6 mb-4 bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-yellow-600 text-lg">⚠️</span>
                 <span className="font-bold text-yellow-800 text-sm">Important</span>
@@ -321,6 +321,24 @@ const PlayQuiz = () => {
               <p className="text-yellow-700 text-xs leading-relaxed">
                 All violations are recorded and visible to your teacher. Make sure you're in a quiet environment with no distractions before starting. Close all unnecessary tabs and applications.
               </p>
+            </div>
+
+            {/* XP Bonus Tips */}
+            <div className="mx-6 mb-6 bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-emerald-600 text-lg">⚡</span>
+                <span className="font-bold text-emerald-800 text-sm">Earn Bonus XP!</span>
+              </div>
+              <div className="space-y-1.5">
+                <p className="text-emerald-700 text-xs flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 bg-green-500 rounded-full flex-shrink-0"></span>
+                  <strong>Speed Bonus (+20%):</strong> Finish in under half the time limit with ≥50% score
+                </p>
+                <p className="text-emerald-700 text-xs flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 bg-purple-500 rounded-full flex-shrink-0"></span>
+                  <strong>Integrity Bonus (+10%):</strong> Complete with zero violations
+                </p>
+              </div>
             </div>
 
             {/* Start Button */}
@@ -391,6 +409,62 @@ const PlayQuiz = () => {
                   )}
                 </div>
               </div>
+
+              {/* XP Bonus Breakdown */}
+              {game.bonuses && (
+                <div className="bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 rounded-2xl border border-indigo-100 p-5 mb-6">
+                  <h3 className="font-black text-sm text-indigo-800 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    ⚡ XP Breakdown
+                  </h3>
+                  <div className="space-y-3">
+                    {/* Base XP */}
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 flex items-center gap-2">
+                        <span className="h-2 w-2 bg-blue-500 rounded-full"></span>
+                        Base XP
+                      </span>
+                      <span className="font-bold text-gray-800">+{game.bonuses.baseXP}</span>
+                    </div>
+                    {/* Speed Bonus */}
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 flex items-center gap-2">
+                        <span className="h-2 w-2 bg-green-500 rounded-full"></span>
+                        Speed Bonus
+                        <span className="text-[10px] text-gray-400">(Finish &lt;50% time)</span>
+                      </span>
+                      <span className={`font-bold ${game.bonuses.speedBonus > 0 ? 'text-green-600' : 'text-gray-300'}`}>
+                        {game.bonuses.speedBonus > 0 ? `+${game.bonuses.speedBonus}` : '—'}
+                      </span>
+                    </div>
+                    {/* Integrity Bonus */}
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 flex items-center gap-2">
+                        <span className="h-2 w-2 bg-purple-500 rounded-full"></span>
+                        Integrity Bonus
+                        <span className="text-[10px] text-gray-400">(0 violations)</span>
+                      </span>
+                      <span className={`font-bold ${game.bonuses.integrityBonus > 0 ? 'text-purple-600' : 'text-gray-300'}`}>
+                        {game.bonuses.integrityBonus > 0 ? `+${game.bonuses.integrityBonus}` : '—'}
+                      </span>
+                    </div>
+                    {/* Penalty */}
+                    {game.bonuses.penaltyApplied && (
+                      <div className="flex items-center justify-between border-t border-red-100 pt-3">
+                        <span className="text-sm text-red-600 flex items-center gap-2 font-bold">
+                          <span className="h-2 w-2 bg-red-500 rounded-full"></span>
+                          Violation Penalty (50%)
+                        </span>
+                        <span className="font-bold text-red-600">Applied</span>
+                      </div>
+                    )}
+                    {/* Total */}
+                    <div className="flex items-center justify-between border-t border-indigo-200 pt-3 mt-1">
+                      <span className="text-sm font-black text-indigo-800">Total XP</span>
+                      <span className="font-black text-lg text-indigo-700">{game.xpEarned}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Re-attempt Badge */}
               {game.isReattempt && (

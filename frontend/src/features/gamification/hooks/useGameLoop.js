@@ -22,6 +22,7 @@ export const useGameLoop = (quizId, quizData) => {
   const [questionDetails, setQuestionDetails] = useState([]);
   const [resultId, setResultId] = useState(null);
   const [previousResult, setPreviousResult] = useState(null);
+  const [bonuses, setBonuses] = useState(null);
 
   const timerRef = useRef(null);
   const answersRef = useRef([]);
@@ -66,6 +67,7 @@ export const useGameLoop = (quizId, quizData) => {
     setQuestionDetails([]);
     setResultId(null);
     setTerminatedBySystem(false);
+    setBonuses(null);
     setTimeLeft(quizData?.timeLimit || 60);
     setGameState('PLAYING');
   }, [quizData]);
@@ -132,6 +134,7 @@ export const useGameLoop = (quizId, quizData) => {
       setIsReattempt(data.isReattempt);
       setQuestionDetails(data.questionDetails || []);
       setResultId(data.resultId);
+      setBonuses(data.bonuses || null);
       return data;
     } catch (error) {
       toast.error("Failed to submit quiz");
@@ -159,5 +162,6 @@ export const useGameLoop = (quizId, quizData) => {
     questionDetails,
     resultId,
     previousResult,
+    bonuses,
   };
 };
