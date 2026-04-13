@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../../../services/api';
 import { useGameLoop } from '../../../features/gamification/hooks/useGameLoop';
 import { useSecureQuiz } from '../../../features/gamification/hooks/useSecureQuiz';
+import { useQuizPersistence } from '../../../features/gamification/hooks/useQuizPersistence';
 import GameCanvas from '../../../features/gamification/components/GameCanvas';
 
 const PlayQuiz = () => {
@@ -16,8 +17,11 @@ const PlayQuiz = () => {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState(null);
   const [aiCreditsNeeded, setAiCreditsNeeded] = useState(false);
-  const [aiCredits, setAiCredits] = useState(null); // { summary, chatbot, purchased }
+  const [aiCredits, setAiCredits] = useState(null);
   const [showQuestionDetails, setShowQuestionDetails] = useState(false);
+
+  // Resume dialog state
+  const [showResumeDialog, setShowResumeDialog] = useState(false);
 
   // Fetch AI credits on mount
   useEffect(() => {
@@ -40,8 +44,11 @@ const PlayQuiz = () => {
     loadQuiz();
   }, [id, navigate]);
 
-  // Init Game Engine
-  const game = useGameLoop(id, quizData);
+  // Init Persistence Engine
+  const persistence = useQuizPersistence(id);
+
+  // Init Game Engine (pass persistence)
+  const game = useGameLoop(id, quizData, persistence);
 
   // Force end callback — uses ref to avoid stale closure
   const handleMaxViolations = useCallback(() => {
@@ -59,10 +66,37 @@ const PlayQuiz = () => {
     violationsRef.current = secure.violations;
   }, [secure.violations]);
 
+  // Show resume dialog when saved progress is found (on INSTRUCTIONS state)
+  useEffect(() => {
+    if (
+      persistence.hasSavedProgress &&
+      (game.gameState === 'INSTRUCTIONS' || game.gameState === 'PREVIOUS_ATTEMPT')
+    ) {
+      setShowResumeDialog(true);
+    }
+  }, [persistence.hasSavedProgress, game.gameState]);
+
   // Handle starting the quiz (from instructions screen)
   const handleStartQuiz = async () => {
     await secure.enterFullscreen();
+    persistence.dismissSavedProgress();
     game.startQuiz();
+  };
+
+  // Handle resuming quiz from saved progress
+  const handleResumeQuiz = async () => {
+    const saved = persistence.loadProgress();
+    if (saved) {
+      await secure.enterFullscreen();
+      game.resumeQuiz(saved);
+      setShowResumeDialog(false);
+    }
+  };
+
+  // Handle starting fresh (dismiss saved progress)
+  const handleStartFresh = async () => {
+    persistence.dismissSavedProgress();
+    setShowResumeDialog(false);
   };
 
   // Cleanup fullscreen on unmount or finish
@@ -120,6 +154,15 @@ const PlayQuiz = () => {
 
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+        {/* Resume Dialog Overlay */}
+        {showResumeDialog && (
+          <ResumeDialog
+            savedProgress={persistence.savedProgress}
+            onResume={handleResumeQuiz}
+            onStartFresh={handleStartFresh}
+          />
+        )}
+
         <div className="max-w-2xl w-full">
           <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
             {/* Header */}
@@ -263,6 +306,15 @@ const PlayQuiz = () => {
   if (game.gameState === 'INSTRUCTIONS') {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+        {/* Resume Dialog Overlay */}
+        {showResumeDialog && (
+          <ResumeDialog
+            savedProgress={persistence.savedProgress}
+            onResume={handleResumeQuiz}
+            onStartFresh={handleStartFresh}
+          />
+        )}
+
         <div className="max-w-lg w-full">
           {/* Header */}
           <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
@@ -339,6 +391,12 @@ const PlayQuiz = () => {
                     <strong className="text-gray-900">Timer is Final</strong> — Once the timer runs out, your quiz auto-submits. No extensions.
                   </span>
                 </li>
+                <li className="flex items-start gap-3">
+                  <span className="flex-shrink-0 h-6 w-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-black">6</span>
+                  <span className="text-gray-700 text-sm">
+                    <strong className="text-gray-900">Navigate Freely</strong> — Use Next, Previous buttons or the question palette to move between questions. Bookmark questions for review.
+                  </span>
+                </li>
               </ul>
             </div>
 
@@ -350,6 +408,17 @@ const PlayQuiz = () => {
               </div>
               <p className="text-yellow-700 text-xs leading-relaxed">
                 All violations are recorded and visible to your teacher. Make sure you're in a quiet environment with no distractions before starting. Close all unnecessary tabs and applications.
+              </p>
+            </div>
+
+            {/* Offline Resilience Notice */}
+            <div className="mx-6 mb-4 bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-blue-600 text-lg">📡</span>
+                <span className="font-bold text-blue-800 text-sm">Offline Protected</span>
+              </div>
+              <p className="text-blue-700 text-xs leading-relaxed">
+                Your progress is automatically saved locally. If you lose internet, the timer will pause and your answers are safe. They'll be submitted when you're back online.
               </p>
             </div>
 
@@ -599,22 +668,90 @@ const PlayQuiz = () => {
 
   // --- PLAYING SCREEN ---
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4" style={{ userSelect: 'none' }}>
-      <GameCanvas
-        question={game.currentQuestion}
-        timeLeft={game.timeLeft}
-        totalTime={quizData.timeLimit}
-        onAnswer={game.handleAnswer}
-        currentQIndex={game.currentQuestionIndex}
-        totalQ={game.totalQuestions}
-        violations={secure.violations}
-        maxViolations={secure.maxViolations}
-      />
-    </div>
+    <GameCanvas
+      question={game.currentQuestion}
+      timeLeft={game.timeLeft}
+      totalTime={quizData.timeLimit}
+      currentQIndex={game.currentQuestionIndex}
+      totalQ={game.totalQuestions}
+      violations={secure.violations}
+      maxViolations={secure.maxViolations}
+      answers={game.answers}
+      bookmarkedQuestions={game.bookmarkedQuestions}
+      isOnline={persistence.isOnline}
+      timerPaused={game.timerPaused}
+
+      // Navigation handlers
+      onSelectAnswer={game.selectAnswer}
+      onClearAnswer={game.clearAnswer}
+      onGoToQuestion={game.goToQuestion}
+      onGoToNext={game.goToNext}
+      onGoToPrev={game.goToPrev}
+      onToggleBookmark={game.toggleBookmark}
+      onMarkAndNext={game.markAndNext}
+      onSaveAndNext={game.saveAndNext}
+      onSubmitQuiz={game.submitQuiz}
+      getQuestionStatus={game.getQuestionStatus}
+      stats={game.stats}
+    />
   );
 };
 
 // ===== SUB-COMPONENTS =====
+
+// Resume Quiz Dialog
+const ResumeDialog = ({ savedProgress, onResume, onStartFresh }) => (
+  <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+    <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white text-center">
+        <div className="text-4xl mb-2">💾</div>
+        <h3 className="text-xl font-black">Resume Quiz?</h3>
+        <p className="text-blue-200 text-sm mt-1">You have unsaved progress</p>
+      </div>
+      <div className="p-6">
+        {savedProgress && (
+          <div className="bg-blue-50 rounded-xl p-4 mb-5 border border-blue-100">
+            <div className="space-y-2 text-sm text-gray-600">
+              <div className="flex justify-between">
+                <span>Questions Answered:</span>
+                <span className="font-bold text-blue-700">
+                  {savedProgress.answers?.filter(a => a !== null && a !== undefined).length || 0} / {savedProgress.answers?.length || 0}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span>Time Remaining:</span>
+                <span className="font-bold text-blue-700">
+                  {Math.floor((savedProgress.timeLeft || 0) / 60)}:{String((savedProgress.timeLeft || 0) % 60).padStart(2, '0')}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span>Saved At:</span>
+                <span className="font-bold text-gray-500 text-xs">
+                  {new Date(savedProgress.savedAt).toLocaleString('en-IN')}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="flex gap-3">
+          <button
+            onClick={onStartFresh}
+            className="flex-1 py-3 rounded-xl bg-gray-100 text-gray-700 font-bold text-sm hover:bg-gray-200 transition-all"
+          >
+            🗑️ Start Fresh
+          </button>
+          <button
+            onClick={onResume}
+            className="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-sm hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg shadow-blue-200"
+          >
+            ▶️ Resume Quiz
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 // Question Breakdown Component
 const QuestionBreakdown = ({ questions }) => (
