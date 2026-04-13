@@ -3,6 +3,7 @@ import Quiz from '../models/quiz.model.js';
 import Result from '../models/result.model.js';
 import User from '../models/user.model.js';
 import { generateQuizSummary } from '../services/ai.service.js';
+import { resetDailyCredits, deductCredit } from './aiCredits.controller.js';
 
 // 1. TEACHER: Create a new Drill/Quiz
 export const createQuiz = async (req, res) => {
@@ -279,7 +280,7 @@ export const getQuizResult = async (req, res) => {
   }
 };
 
-// 6. STUDENT: Generate AI Summary for a Quiz Result
+// 6. STUDENT: Generate AI Summary for a Quiz Result (Credit-gated)
 export const generateAISummary = async (req, res) => {
   try {
     const { id } = req.params; // quizId
@@ -294,7 +295,7 @@ export const generateAISummary = async (req, res) => {
       return res.status(404).json({ message: "No quiz result found. Take the quiz first." });
     }
 
-    // If AI summary already exists for this result, return it
+    // If AI summary already exists for this result, return it (FREE — no credit needed)
     if (result.aiSummary) {
       return res.json({
         summary: result.aiSummary,
@@ -303,6 +304,24 @@ export const generateAISummary = async (req, res) => {
       });
     }
 
+    // ── Credit Check ──
+    const user = await User.findById(req.user.id);
+    resetDailyCredits(user);
+
+    if (!deductCredit(user, 'summary')) {
+      await user.save();
+      return res.status(403).json({
+        error: 'No AI credits remaining! Purchase more from the Credit Center.',
+        creditsNeeded: true,
+        credits: {
+          summary: user.aiCredits.summary,
+          chatbot: user.aiCredits.chatbot,
+          purchased: user.aiCredits.purchased,
+        },
+      });
+    }
+    await user.save();
+
     // Fetch full quiz data (with correct answers) for the AI prompt
     const quiz = await Quiz.findById(id);
     if (!quiz) {
@@ -310,7 +329,19 @@ export const generateAISummary = async (req, res) => {
     }
 
     // Generate AI summary
-    const summary = await generateQuizSummary(quiz, result);
+    let summary;
+    try {
+      summary = await generateQuizSummary(quiz, result);
+    } catch (aiErr) {
+      // Refund credit on AI failure
+      if (user.aiCredits.summary < 10) {
+        user.aiCredits.summary += 1;
+      } else {
+        user.aiCredits.purchased += 1;
+      }
+      await user.save();
+      throw aiErr;
+    }
 
     // Save to database
     result.aiSummary = summary;
@@ -320,7 +351,12 @@ export const generateAISummary = async (req, res) => {
     res.json({
       summary,
       generatedAt: result.aiSummaryGeneratedAt,
-      cached: false
+      cached: false,
+      credits: {
+        summary: user.aiCredits.summary,
+        chatbot: user.aiCredits.chatbot,
+        purchased: user.aiCredits.purchased,
+      },
     });
   } catch (err) {
     console.error('AI Summary Error:', err.message);

@@ -26,6 +26,14 @@ const userSchema = new mongoose.Schema({
 
   totalXP: { type: Number, default: 0 },
 
+  // AI Credits System (students only)
+  aiCredits: {
+    summary: { type: Number, default: 2 },      // Free summary credits (rollover, cap 10)
+    chatbot: { type: Number, default: 3 },       // Free chatbot credits (rollover, cap 15)
+    purchased: { type: Number, default: 0 },     // Purchased credits (shared pool, no cap)
+    lastResetDate: { type: String, default: '' }, // "YYYY-MM-DD" — triggers daily top-up
+  },
+
   // Gamification: Items purchased from the Go-Bag Shop
   ownedItems: [{ type: String }],
 

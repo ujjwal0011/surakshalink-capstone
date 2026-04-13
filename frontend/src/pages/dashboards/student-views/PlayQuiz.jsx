@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../../../services/api';
 import { useGameLoop } from '../../../features/gamification/hooks/useGameLoop';
 import { useSecureQuiz } from '../../../features/gamification/hooks/useSecureQuiz';
@@ -15,7 +15,16 @@ const PlayQuiz = () => {
   const [aiSummary, setAiSummary] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState(null);
+  const [aiCreditsNeeded, setAiCreditsNeeded] = useState(false);
+  const [aiCredits, setAiCredits] = useState(null); // { summary, chatbot, purchased }
   const [showQuestionDetails, setShowQuestionDetails] = useState(false);
+
+  // Fetch AI credits on mount
+  useEffect(() => {
+    api.get('/ai/credits').then(({ data }) => {
+      setAiCredits({ summary: data.summary, chatbot: data.chatbot, purchased: data.purchased });
+    }).catch(() => {});
+  }, []);
 
   // Fetch Quiz Data
   useEffect(() => {
@@ -71,14 +80,20 @@ const PlayQuiz = () => {
     }
   }, [game.previousResult]);
 
-  // Generate AI Summary
+  // Generate AI Summary (credit-gated)
   const handleGenerateAISummary = async () => {
     setAiLoading(true);
     setAiError(null);
+    setAiCreditsNeeded(false);
     try {
       const { data } = await api.post(`/quiz/${id}/ai-summary`);
       setAiSummary(data.summary);
+      if (data.credits) setAiCredits(data.credits);
     } catch (error) {
+      if (error.response?.data?.creditsNeeded) {
+        setAiCreditsNeeded(true);
+        if (error.response.data.credits) setAiCredits(error.response.data.credits);
+      }
       setAiError(error.response?.data?.error || 'Failed to generate AI summary. Please try again.');
     } finally {
       setAiLoading(false);
@@ -189,7 +204,7 @@ const PlayQuiz = () => {
               {!aiSummary && (
                 <button
                   onClick={handleGenerateAISummary}
-                  disabled={aiLoading}
+                  disabled={aiLoading || aiCreditsNeeded}
                   className="w-full mb-4 bg-gradient-to-r from-violet-500 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:from-violet-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-purple-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-3"
                 >
                   {aiLoading ? (
@@ -198,12 +213,27 @@ const PlayQuiz = () => {
                       Analyzing with AI...
                     </>
                   ) : (
-                    <>✨ Summarize with AI</>
+                    <>
+                      ✨ Summarize with AI
+                      {aiCredits && (
+                        <span className="text-xs bg-white/20 px-2 py-1 rounded-full ml-1">
+                          {aiCredits.summary + aiCredits.purchased} left
+                        </span>
+                      )}
+                    </>
                   )}
                 </button>
               )}
 
-              {aiError && (
+              {aiCreditsNeeded ? (
+                <div className="mb-4 bg-red-50 border border-red-200 rounded-xl p-4 text-center">
+                  <p className="text-red-700 font-bold mb-1">⚡ Out of AI Credits</p>
+                  <p className="text-red-600 text-xs mb-3">You need summary credits to use this feature.</p>
+                  <Link to="/dashboard/student/ai" className="inline-block bg-red-100 text-red-700 font-bold text-xs px-4 py-2 rounded-lg hover:bg-red-200 transition">
+                    Visit Credit Center
+                  </Link>
+                </div>
+              ) : aiError && (
                 <div className="mb-4 bg-red-50 border border-red-200 rounded-xl p-4 text-red-600 text-sm">
                   {aiError}
                 </div>
@@ -518,7 +548,7 @@ const PlayQuiz = () => {
               ) : (
                 <button
                   onClick={handleGenerateAISummary}
-                  disabled={aiLoading}
+                  disabled={aiLoading || aiCreditsNeeded}
                   className="w-full mb-4 bg-gradient-to-r from-violet-500 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:from-violet-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-purple-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-3"
                 >
                   {aiLoading ? (
@@ -527,12 +557,27 @@ const PlayQuiz = () => {
                       Analyzing with AI...
                     </>
                   ) : (
-                    <>✨ Summarize with AI</>
+                    <>
+                      ✨ Summarize with AI
+                      {aiCredits && (
+                        <span className="text-xs bg-white/20 px-2 py-1 rounded-full ml-1">
+                          {aiCredits.summary + aiCredits.purchased} left
+                        </span>
+                      )}
+                    </>
                   )}
                 </button>
               )}
 
-              {aiError && (
+              {aiCreditsNeeded ? (
+                <div className="mb-4 bg-red-50 border border-red-200 rounded-xl p-4 text-center">
+                  <p className="text-red-700 font-bold mb-1">⚡ Out of AI Credits</p>
+                  <p className="text-red-600 text-xs mb-3">You need summary credits to use this feature.</p>
+                  <Link to="/dashboard/student/ai" className="inline-block bg-red-100 text-red-700 font-bold text-xs px-4 py-2 rounded-lg hover:bg-red-200 transition">
+                    Visit Credit Center
+                  </Link>
+                </div>
+              ) : aiError && (
                 <div className="mb-4 bg-red-50 border border-red-200 rounded-xl p-4 text-red-600 text-sm">
                   {aiError}
                 </div>

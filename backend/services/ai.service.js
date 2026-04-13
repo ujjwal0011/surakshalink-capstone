@@ -166,3 +166,83 @@ export const generateQuizSummary = async (quiz, result) => {
     _fallback: true
   };
 };
+
+// ─── CHATBOT: Disaster Preparedness Chat ───
+
+const CHAT_SYSTEM_PROMPT = `You are SurakshaBot 🛡️, a disaster preparedness expert assistant designed for school students in India.
+
+You ONLY answer questions related to:
+- Natural disasters (earthquakes, floods, cyclones, tsunamis, landslides, droughts, volcanic eruptions, avalanches)
+- Man-made disasters (fire, chemical spills, building collapses, industrial accidents, stampedes, nuclear incidents)
+- Emergency preparedness, safety drills, first aid basics
+- Evacuation procedures, survival tips, emergency kits (Go-Bags)
+- India's disaster management: NDRF, SDRF, NDMA, State Disaster Management Authorities
+- Weather warnings, disaster early warning systems
+- Post-disaster recovery, psychological first aid
+
+CRITICAL RULES:
+1. If a question is NOT related to disasters, safety, emergencies, or preparedness, you MUST politely decline and say: "I'm SurakshaBot — I can only help with disaster preparedness and safety topics! 🛡️ Try asking me about earthquake safety, flood preparedness, first aid, or emergency procedures."
+2. Keep responses concise (2-4 paragraphs max), educational, and age-appropriate for school students.
+3. Use examples relevant to Indian geography, climate, and infrastructure where possible.
+4. Include actionable safety tips with bullet points wherever applicable.
+5. Never provide professional medical advice beyond basic first aid.
+6. Be encouraging and supportive — make students feel empowered about disaster preparedness.
+7. Use emojis sparingly to keep the tone friendly but professional.
+8. If asked about your identity, say you are SurakshaBot, part of the SurakshaLink disaster preparedness platform.`;
+
+const buildChatPrompt = (userMessage, conversationHistory) => {
+  let prompt = CHAT_SYSTEM_PROMPT + '\n\n';
+
+  // Add conversation history for context
+  if (conversationHistory && conversationHistory.length > 0) {
+    prompt += '--- Previous Conversation Context ---\n';
+    conversationHistory.forEach(msg => {
+      const label = msg.role === 'user' ? 'Student' : 'SurakshaBot';
+      prompt += `${label}: ${msg.content}\n\n`;
+    });
+    prompt += '--- End of Context ---\n\n';
+  }
+
+  prompt += `Student's new message: ${userMessage}\n\nRespond helpfully as SurakshaBot:`;
+  return prompt;
+};
+
+export const generateChatResponse = async (userMessage, conversationHistory = []) => {
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY is not configured in environment variables');
+  }
+
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const prompt = buildChatPrompt(userMessage, conversationHistory);
+
+  // Try each model in the fallback chain
+  for (const modelName of MODELS) {
+    try {
+      console.log(`[Chat] Trying model: ${modelName}`);
+      const text = await tryModel(genAI, modelName, prompt);
+      console.log(`[Chat] Success with model: ${modelName}`);
+      return text.trim();
+    } catch (error) {
+      console.warn(`[Chat] Model ${modelName} failed:`, error.message);
+
+      if (error.message.includes('429') || error.message.includes('Too Many Requests')) {
+        console.log(`[Chat] Rate limited on ${modelName}, waiting before trying next model...`);
+        await delay(5000);
+        continue;
+      }
+
+      if (error.message.includes('GEMINI_API_KEY')) {
+        throw error;
+      }
+
+      continue;
+    }
+  }
+
+  // All models failed — return fallback
+  console.error('[Chat] All Gemini models failed. Returning fallback response.');
+  return "I'm having trouble connecting to my AI systems right now. 🛡️ Please try again in a few moments. In the meantime, check out the Guides section for disaster preparedness information!";
+};
+

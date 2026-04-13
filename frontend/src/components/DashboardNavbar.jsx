@@ -34,6 +34,7 @@ const DashboardNavbar = () => {
         return [
           { label: 'Drill Lobby', path: '/dashboard/student', icon: '🎮' },
           { label: 'Go-Bag Shop', path: '/dashboard/student/shop', icon: '🎒' },
+          { label: 'AI Assistant', path: '/dashboard/student/ai', icon: '🤖' },
           { label: 'Guides', path: '/dashboard/student/guides', icon: '📖' },
           { label: 'Emergency', path: '/dashboard/student/emergency-contacts', icon: '🆘' },
         ];
