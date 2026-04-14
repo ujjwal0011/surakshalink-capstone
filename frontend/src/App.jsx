@@ -27,6 +27,7 @@ import ViewGuide from "./pages/dashboards/student-views/ViewGuide";
 import StudentShop from "./pages/dashboards/student-views/StudentShop";
 import StudentAI from "./pages/dashboards/student-views/StudentAI";
 import SchoolAnalytics from "./pages/dashboards/principal-views/SchoolAnalytics";
+import Leaderboard from "./pages/dashboards/Leaderboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { SocketProvider } from "./context/SocketContext";
 
@@ -71,6 +72,10 @@ function App() {
                   element={<ViewGuide />}
                 />
                 <Route
+                  path="/dashboard/principal/leaderboard"
+                  element={<Leaderboard />}
+                />
+                <Route
                   path="/dashboard/principal/emergency-contacts"
                   element={<EmergencyContacts />}
                 />
@@ -110,6 +115,10 @@ function App() {
                   element={<EditGuide />}
                 />
                 <Route
+                  path="/dashboard/teacher/leaderboard"
+                  element={<Leaderboard />}
+                />
+                <Route
                   path="/dashboard/teacher/emergency-contacts"
                   element={<EmergencyContacts />}
                 />
@@ -135,6 +144,10 @@ function App() {
                 <Route
                   path="/dashboard/student/ai"
                   element={<StudentAI />}
+                />
+                <Route
+                  path="/dashboard/student/leaderboard"
+                  element={<Leaderboard />}
                 />
                 <Route
                   path="/dashboard/student/emergency-contacts"

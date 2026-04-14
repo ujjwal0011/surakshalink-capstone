@@ -12,6 +12,7 @@ import analyticsRoutes from './routes/analytics.route.js';
 import guideRoutes from './routes/guide.route.js';
 import shopRoutes from './routes/shop.route.js';
 import aiRoutes from './routes/ai.route.js';
+import leaderboardRoutes from './routes/leaderboard.route.js';
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/guides', guideRoutes);
 app.use('/api/shop', shopRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
 
 const io = new Server(server, {
   cors: {

@@ -172,3 +172,55 @@ html {
 .animate-scale-in {
   animation: scale-in 0.3s ease-out forwards;
 }
+
+/* ── Leaderboard Animations ── */
+
+@keyframes leaderboard-rank-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes leaderboard-podium-rise {
+  from {
+    opacity: 0;
+    transform: translateY(60px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes leaderboard-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(99, 102, 241, 0.6);
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.leaderboard-rank-slide-in {
+  opacity: 0;
+  animation: leaderboard-rank-slide-in 0.5s ease-out forwards;
+}
+
+.leaderboard-podium-rise {
+  opacity: 0;
+  animation: leaderboard-podium-rise 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.leaderboard-glow-pulse {
+  animation: leaderboard-glow-pulse 2s ease-in-out infinite;
+}
