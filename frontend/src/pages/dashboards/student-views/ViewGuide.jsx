@@ -86,60 +86,57 @@ const ViewGuide = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Header */}
-      <div className={`bg-gradient-to-br ${colors.gradient} text-white`}>
-        <div className="max-w-4xl mx-auto px-8 py-12">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-4xl mx-auto px-8 py-8">
           {/* Back button */}
           <button
             onClick={() => navigate(getBackPath())}
-            className="flex items-center gap-2 text-white/80 hover:text-white mb-8 transition font-medium"
+            className="flex items-center gap-2 text-gray-500 hover:text-gray-700 mb-6 transition font-medium text-sm"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Back to Guides
           </button>
 
-          <div className="flex items-start gap-6">
+          <div className="flex items-start gap-5">
             {/* Emoji */}
-            <div className="h-20 w-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/30 flex-shrink-0">
-              <span className="text-4xl">{guide.coverEmoji || "📖"}</span>
+            <div className={`h-16 w-16 bg-gray-50 border border-gray-200 rounded-xl flex items-center justify-center flex-shrink-0`}>
+              <span className="text-3xl">{guide.coverEmoji || "📖"}</span>
             </div>
 
             <div className="flex-1">
               {/* Category Badge */}
-              <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-sm border border-white/30 mb-3">
+              <span className={`inline-block px-2.5 py-1 rounded text-xs font-medium ${colors.bg} ${colors.text} mb-2`}>
                 {guide.category || "General"}
               </span>
 
-              <h1 className="text-3xl md:text-4xl font-black leading-tight mb-3">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight mb-2">
                 {guide.title}
               </h1>
 
               {guide.description && (
-                <p className="text-white/80 text-lg leading-relaxed max-w-2xl">
+                <p className="text-gray-500 text-sm leading-relaxed max-w-2xl">
                   {guide.description}
                 </p>
               )}
 
               {/* Meta */}
-              <div className="flex items-center gap-4 mt-5 text-sm text-white/70">
+              <div className="flex items-center gap-4 mt-4 text-xs text-gray-400">
                 <span className="flex items-center gap-1.5">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                   {guide.createdBy?.name || "Teacher"}
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                   {createdDate}
                 </span>
-                <span className="flex items-center gap-1.5">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
+                <span>
                   {guide.sections?.length || 0} section{guide.sections?.length !== 1 ? "s" : ""}
                 </span>
               </div>
@@ -183,7 +180,7 @@ const ViewGuide = () => {
             >
               {/* Section Header */}
               <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-                <span className={`h-8 w-8 bg-gradient-to-br ${colors.gradient} rounded-lg flex items-center justify-center text-white text-sm font-bold shadow-sm`}>
+                <span className="h-7 w-7 bg-blue-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">
                   {index + 1}
                 </span>
                 <h2 className="text-xl font-bold text-gray-800">{section.heading}</h2>

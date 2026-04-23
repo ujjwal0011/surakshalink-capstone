@@ -165,22 +165,22 @@ const PrincipalDashboard = () => {
           </div>
 
           {/* Global Summary Card */}
-          <div className="bg-gray-800 text-white rounded-xl shadow-md p-6">
-            <h3 className="text-gray-400 text-xs font-bold uppercase tracking-wider">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 className="text-gray-400 text-xs font-semibold uppercase tracking-wider">
               Total School Status
             </h3>
             <div className="flex items-end mt-2">
               <span
-                className={`text-6xl font-black ${activeAlert ? "text-green-400" : "text-gray-500"
+                className={`text-5xl font-bold ${activeAlert ? "text-green-600" : "text-gray-300"
                   }`}
               >
                 {totalSafe}
               </span>
-              <span className="text-2xl text-gray-500 mb-2 ml-2">
+              <span className="text-xl text-gray-400 mb-1 ml-2">
                 / {totalStudents}
               </span>
             </div>
-            <div className="w-full bg-gray-700 h-2 mt-4 rounded-full overflow-hidden">
+            <div className="w-full bg-gray-100 h-2 mt-4 rounded-full overflow-hidden">
               <div
                 className="bg-green-500 h-full transition-all duration-500"
                 style={{

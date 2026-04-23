@@ -22,21 +22,18 @@ const PublicNavbar = () => {
   return (
     <nav
       id="public-navbar"
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'glass-dark shadow-2xl shadow-black/20'
-          : 'bg-transparent'
+          ? 'bg-white shadow-sm border-b border-gray-200'
+          : 'bg-white/80 backdrop-blur-sm'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="h-9 w-9 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/50 transition-shadow">
-              <span className="text-white font-black text-sm">SL</span>
-            </div>
-            <span className="text-white font-extrabold text-xl tracking-tight">
-              Suraksha<span className="text-cyan-400">Link</span>
+          <Link to="/" className="flex items-center gap-2">
+            <span className="text-gray-900 font-bold text-xl tracking-tight">
+              Suraksha<span className="text-blue-600">Link</span>
             </span>
           </Link>
 
@@ -46,28 +43,26 @@ const PublicNavbar = () => {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-slate-300 hover:text-white font-medium text-sm transition-colors relative group"
+                className="text-gray-500 hover:text-gray-900 font-medium text-sm transition-colors"
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-400 group-hover:w-full transition-all duration-300" />
               </a>
             ))}
             <Link
               to="/emergency-contacts"
-              className="flex items-center gap-1.5 text-red-400 hover:text-red-300 font-semibold text-sm transition-colors relative group"
+              className="text-red-600 hover:text-red-700 font-medium text-sm transition-colors"
             >
-              <span>🆘</span> Emergency
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-400 group-hover:w-full transition-all duration-300" />
+              Emergency
             </Link>
             <Link
               to="/login"
-              className="bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-xl font-semibold text-sm border border-white/20 hover:border-white/40 transition-all duration-300 hover:shadow-lg hover:shadow-white/10"
+              className="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg font-medium text-sm border border-gray-200 hover:border-gray-300 transition-all"
             >
               Login
             </Link>
             <Link
               to="/register-principal"
-              className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 hover:scale-105"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors"
             >
               Register School
             </Link>
@@ -77,7 +72,7 @@ const PublicNavbar = () => {
           <button
             id="mobile-menu-toggle"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
+            className="md:hidden text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-colors"
             aria-label="Toggle menu"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,13 +87,13 @@ const PublicNavbar = () => {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden glass rounded-2xl p-4 mt-2 mb-4 animate-fade-in">
+          <div className="md:hidden bg-white border-t border-gray-100 py-3 animate-fade-in">
             {navLinks.map(link => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-slate-200 hover:text-white font-medium py-3 px-4 rounded-lg hover:bg-white/10 transition-colors"
+                className="block text-gray-600 hover:text-gray-900 font-medium py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 {link.label}
               </a>
@@ -106,20 +101,20 @@ const PublicNavbar = () => {
             <Link
               to="/emergency-contacts"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 text-red-400 hover:text-red-300 font-semibold py-3 px-4 rounded-lg hover:bg-red-500/10 transition-colors"
+              className="block text-red-600 hover:text-red-700 font-medium py-3 px-4 rounded-lg hover:bg-red-50 transition-colors"
             >
-              <span>🆘</span> Emergency Contacts
+              Emergency Contacts
             </Link>
-            <div className="border-t border-white/10 mt-3 pt-3 space-y-2">
+            <div className="border-t border-gray-100 mt-3 pt-3 space-y-2 px-4">
               <Link
                 to="/login"
-                className="block text-center text-white font-semibold py-3 px-4 rounded-xl border border-white/20 hover:bg-white/10 transition-colors"
+                className="block text-center text-gray-700 font-medium py-2.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
               >
                 Login
               </Link>
               <Link
                 to="/register-principal"
-                className="block text-center text-white font-semibold py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500"
+                className="block text-center text-white font-medium py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors"
               >
                 Register School
               </Link>

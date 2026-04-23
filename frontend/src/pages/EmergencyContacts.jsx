@@ -65,58 +65,58 @@ const FALLBACK_CONTACTS = {
 // ─── Color scheme mapping ──────────────────────────────────────
 const COLOR_MAP = {
   red: {
-    card: 'bg-gradient-to-br from-red-500/10 to-red-600/5 border-red-200/60',
-    header: 'bg-gradient-to-r from-red-600 to-rose-500',
+    card: 'bg-white border-gray-200',
+    header: 'bg-red-600',
     badge: 'bg-red-100 text-red-700 border-red-200',
-    icon: 'bg-red-500/15 text-red-600',
-    callBtn: 'bg-red-600 hover:bg-red-700 shadow-red-500/25',
-    copyBtn: 'border-red-300 text-red-600 hover:bg-red-50',
-    glow: 'hover:shadow-red-500/15',
+    icon: 'bg-red-50 text-red-600',
+    callBtn: 'bg-red-600 hover:bg-red-700',
+    copyBtn: 'border-gray-200 text-gray-600 hover:bg-gray-50',
+    glow: 'hover:shadow-md',
   },
   blue: {
-    card: 'bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-200/60',
-    header: 'bg-gradient-to-r from-blue-600 to-cyan-500',
+    card: 'bg-white border-gray-200',
+    header: 'bg-blue-600',
     badge: 'bg-blue-100 text-blue-700 border-blue-200',
-    icon: 'bg-blue-500/15 text-blue-600',
-    callBtn: 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/25',
-    copyBtn: 'border-blue-300 text-blue-600 hover:bg-blue-50',
-    glow: 'hover:shadow-blue-500/15',
+    icon: 'bg-blue-50 text-blue-600',
+    callBtn: 'bg-blue-600 hover:bg-blue-700',
+    copyBtn: 'border-gray-200 text-gray-600 hover:bg-gray-50',
+    glow: 'hover:shadow-md',
   },
   orange: {
-    card: 'bg-gradient-to-br from-orange-500/10 to-amber-600/5 border-orange-200/60',
-    header: 'bg-gradient-to-r from-orange-600 to-amber-500',
+    card: 'bg-white border-gray-200',
+    header: 'bg-orange-600',
     badge: 'bg-orange-100 text-orange-700 border-orange-200',
-    icon: 'bg-orange-500/15 text-orange-600',
-    callBtn: 'bg-orange-600 hover:bg-orange-700 shadow-orange-500/25',
-    copyBtn: 'border-orange-300 text-orange-600 hover:bg-orange-50',
-    glow: 'hover:shadow-orange-500/15',
+    icon: 'bg-orange-50 text-orange-600',
+    callBtn: 'bg-orange-600 hover:bg-orange-700',
+    copyBtn: 'border-gray-200 text-gray-600 hover:bg-gray-50',
+    glow: 'hover:shadow-md',
   },
   purple: {
-    card: 'bg-gradient-to-br from-purple-500/10 to-violet-600/5 border-purple-200/60',
-    header: 'bg-gradient-to-r from-purple-600 to-violet-500',
+    card: 'bg-white border-gray-200',
+    header: 'bg-purple-600',
     badge: 'bg-purple-100 text-purple-700 border-purple-200',
-    icon: 'bg-purple-500/15 text-purple-600',
-    callBtn: 'bg-purple-600 hover:bg-purple-700 shadow-purple-500/25',
-    copyBtn: 'border-purple-300 text-purple-600 hover:bg-purple-50',
-    glow: 'hover:shadow-purple-500/15',
+    icon: 'bg-purple-50 text-purple-600',
+    callBtn: 'bg-purple-600 hover:bg-purple-700',
+    copyBtn: 'border-gray-200 text-gray-600 hover:bg-gray-50',
+    glow: 'hover:shadow-md',
   },
   teal: {
-    card: 'bg-gradient-to-br from-teal-500/10 to-emerald-600/5 border-teal-200/60',
-    header: 'bg-gradient-to-r from-teal-600 to-emerald-500',
+    card: 'bg-white border-gray-200',
+    header: 'bg-teal-600',
     badge: 'bg-teal-100 text-teal-700 border-teal-200',
-    icon: 'bg-teal-500/15 text-teal-600',
-    callBtn: 'bg-teal-600 hover:bg-teal-700 shadow-teal-500/25',
-    copyBtn: 'border-teal-300 text-teal-600 hover:bg-teal-50',
-    glow: 'hover:shadow-teal-500/15',
+    icon: 'bg-teal-50 text-teal-600',
+    callBtn: 'bg-teal-600 hover:bg-teal-700',
+    copyBtn: 'border-gray-200 text-gray-600 hover:bg-gray-50',
+    glow: 'hover:shadow-md',
   },
   green: {
-    card: 'bg-gradient-to-br from-green-500/10 to-emerald-600/5 border-green-200/60',
-    header: 'bg-gradient-to-r from-green-600 to-emerald-500',
+    card: 'bg-white border-gray-200',
+    header: 'bg-green-600',
     badge: 'bg-green-100 text-green-700 border-green-200',
-    icon: 'bg-green-500/15 text-green-600',
-    callBtn: 'bg-green-600 hover:bg-green-700 shadow-green-500/25',
-    copyBtn: 'border-green-300 text-green-600 hover:bg-green-50',
-    glow: 'hover:shadow-green-500/15',
+    icon: 'bg-green-50 text-green-600',
+    callBtn: 'bg-green-600 hover:bg-green-700',
+    copyBtn: 'border-gray-200 text-gray-600 hover:bg-gray-50',
+    glow: 'hover:shadow-md',
   },
 };
 
@@ -243,47 +243,32 @@ const EmergencyContacts = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
-      {/* ─── Hero Header ──────────────────────────────────────── */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-        {/* Animated background pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 -left-4 w-72 h-72 bg-red-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob" />
-          <div className="absolute top-0 -right-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000" />
-          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000" />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <div className="min-h-screen bg-gray-50">
+      {/* ─── Header ──────────────────────────────────────── */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Offline Banner */}
           <div
-            className={`mb-6 flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-500 ${
+            className={`mb-6 flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium ${
               isOnline
-                ? 'bg-emerald-500/15 border border-emerald-400/30 text-emerald-300'
-                : 'bg-amber-500/15 border border-amber-400/30 text-amber-300 animate-pulse-subtle'
+                ? 'bg-green-50 border border-green-200 text-green-700'
+                : 'bg-amber-50 border border-amber-200 text-amber-700'
             }`}
           >
             <span className="text-lg">{isOnline ? '🟢' : '🔴'}</span>
             <span>
               {isOnline
-                ? '✅ Works offline in emergencies — contacts are cached on your device'
-                : '📱 You are offline — showing cached emergency contacts'}
+                ? 'Works offline in emergencies — contacts are cached on your device'
+                : 'You are offline — showing cached emergency contacts'}
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
             <div>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="h-12 w-12 bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/30">
-                  <span className="text-2xl">🆘</span>
-                </div>
-                <span className="px-3 py-1 bg-red-500/20 border border-red-400/30 rounded-full text-xs font-bold text-red-300 uppercase tracking-wider">
-                  Emergency
-                </span>
-              </div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
-                Emergency<span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-rose-300"> Contacts</span>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                Emergency Contacts
               </h1>
-              <p className="mt-3 text-slate-400 text-base sm:text-lg max-w-xl leading-relaxed">
+              <p className="mt-2 text-gray-500 text-sm max-w-xl">
                 India's essential emergency helplines. One tap to call. Works without internet.
               </p>
             </div>
@@ -294,14 +279,14 @@ const EmergencyContacts = () => {
                 id="share-location-btn"
                 onClick={handleShareLocation}
                 disabled={locationStatus === 'loading'}
-                className={`flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-bold transition-all duration-300 shadow-lg ${
+                className={`flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   locationStatus === 'success'
-                    ? 'bg-emerald-500 text-white shadow-emerald-500/30'
+                    ? 'bg-green-600 text-white'
                     : locationStatus === 'error'
-                    ? 'bg-red-500 text-white shadow-red-500/30'
+                    ? 'bg-red-600 text-white'
                     : locationStatus === 'loading'
-                    ? 'bg-slate-600 text-slate-300 cursor-wait'
-                    : 'bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 shadow-none hover:shadow-white/10'
+                    ? 'bg-gray-200 text-gray-500 cursor-wait'
+                    : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
                 }`}
               >
                 {locationStatus === 'loading' && (
@@ -314,24 +299,24 @@ const EmergencyContacts = () => {
               </button>
 
               {/* Stats badge */}
-              <div className="flex items-center gap-2 px-4 py-3 bg-white/5 border border-white/10 rounded-xl">
-                <span className="text-2xl font-black text-white">{totalContacts}</span>
-                <span className="text-slate-400 text-sm font-medium">helpline<br />numbers</span>
+              <div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg">
+                <span className="text-xl font-bold text-gray-900">{totalContacts}</span>
+                <span className="text-gray-500 text-xs font-medium">helpline<br />numbers</span>
               </div>
             </div>
           </div>
 
           {/* Location result */}
           {locationStatus === 'success' && locationData && (
-            <div className="mt-4 flex items-center gap-3 px-4 py-3 bg-emerald-500/10 border border-emerald-400/20 rounded-xl animate-fade-in">
+            <div className="mt-4 flex items-center gap-3 px-4 py-3 bg-green-50 border border-green-200 rounded-lg animate-fade-in">
               <span className="text-lg">📍</span>
               <div>
-                <p className="text-emerald-300 text-sm font-semibold">Location shared & copied to clipboard</p>
+                <p className="text-green-700 text-sm font-medium">Location shared & copied to clipboard</p>
                 <a
                   href={`https://www.google.com/maps?q=${locationData.latitude},${locationData.longitude}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-400 text-xs underline hover:text-emerald-300"
+                  className="text-green-600 text-xs underline hover:text-green-800"
                 >
                   {locationData.latitude.toFixed(6)}, {locationData.longitude.toFixed(6)} — Open in Google Maps ↗
                 </a>
@@ -342,7 +327,7 @@ const EmergencyContacts = () => {
       </div>
 
       {/* ─── Search & Filter Bar ─────────────────────────────── */}
-      <div className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 shadow-sm">
+      <div className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row gap-4">
             {/* Search */}
@@ -432,7 +417,7 @@ const EmergencyContacts = () => {
                   <div className={`${colors.header} px-6 py-5`}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                <div className="h-10 w-10 bg-white/20 rounded-lg flex items-center justify-center">
                           <span className="text-xl">{category.icon}</span>
                         </div>
                         <div>
@@ -440,7 +425,7 @@ const EmergencyContacts = () => {
                           <p className="text-white/70 text-xs font-medium">{category.description}</p>
                         </div>
                       </div>
-                      <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-bold text-white">
+                      <span className="px-2.5 py-1 bg-white/20 rounded text-xs font-medium text-white">
                         {category.contacts.length} {category.contacts.length === 1 ? 'number' : 'numbers'}
                       </span>
                     </div>
@@ -477,7 +462,7 @@ const EmergencyContacts = () => {
                             <a
                               href={`tel:${contact.number}`}
                               id={`call-${contact.number}-${index}`}
-                              className={`flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-white text-xs font-bold ${colors.callBtn} shadow-lg transition-all duration-200 hover:scale-105 hover:-translate-y-0.5 active:scale-95`}
+                              className={`flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-white text-xs font-medium ${colors.callBtn} transition-colors`}
                             >
                               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />

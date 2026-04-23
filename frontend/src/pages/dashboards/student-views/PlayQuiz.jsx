@@ -167,8 +167,8 @@ const PlayQuiz = () => {
           <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
             {/* Header */}
             <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-8 text-white text-center">
-              <div className="text-5xl mb-3">📊</div>
-              <h1 className="text-2xl font-black tracking-tight">{quizData.title}</h1>
+              <div className="text-4xl mb-3">📊</div>
+              <h1 className="text-2xl font-bold">{quizData.title}</h1>
               <p className="text-indigo-200 text-sm mt-2">You've attempted this quiz before</p>
             </div>
 
@@ -176,7 +176,7 @@ const PlayQuiz = () => {
             <div className="p-8">
               <div className="flex items-center gap-2 mb-6">
                 <span className="h-2 w-2 bg-indigo-500 rounded-full"></span>
-                <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest">Previous Attempt Results</h3>
+                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider">Previous Attempt Results</h3>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -248,7 +248,7 @@ const PlayQuiz = () => {
                 <button
                   onClick={handleGenerateAISummary}
                   disabled={aiLoading || aiCreditsNeeded}
-                  className="w-full mb-4 bg-gradient-to-r from-violet-500 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:from-violet-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-purple-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-3"
+                  className="w-full mb-4 bg-blue-600 text-white py-3.5 rounded-lg font-medium text-sm hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                 >
                   {aiLoading ? (
                     <>
@@ -285,7 +285,7 @@ const PlayQuiz = () => {
               {/* Action Buttons */}
               <button
                 onClick={() => game.setGameState('INSTRUCTIONS')}
-                className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 rounded-xl font-black text-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-200 flex items-center justify-center gap-2"
+                className="w-full bg-green-600 text-white py-3.5 rounded-lg font-medium text-sm hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
               >
                 🔄 Attempt Again
               </button>
@@ -318,9 +318,9 @@ const PlayQuiz = () => {
         <div className="max-w-lg w-full">
           {/* Header */}
           <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-            <div className="bg-gradient-to-r from-red-600 to-orange-500 p-6 text-white text-center">
-              <div className="text-4xl mb-2">🛡️</div>
-              <h1 className="text-2xl font-black tracking-tight">SECURE EXAM MODE</h1>
+            <div className="bg-red-600 p-6 text-white text-center">
+              <div className="text-3xl mb-2">🛡️</div>
+              <h1 className="text-2xl font-bold">SECURE EXAM MODE</h1>
               <p className="text-red-100 text-sm mt-1">Read all instructions carefully before starting</p>
             </div>
 
@@ -359,40 +359,40 @@ const PlayQuiz = () => {
 
             {/* Rules */}
             <div className="p-6">
-              <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-4">📋 Exam Rules</h3>
+              <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">📋 Exam Rules</h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
-                  <span className="flex-shrink-0 h-6 w-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xs font-black">1</span>
+                  <span className="flex-shrink-0 h-6 w-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xs font-bold">1</span>
                   <span className="text-gray-700 text-sm">
                     <strong className="text-gray-900">Full-Screen Mode Required</strong> — The quiz will enter full-screen. Exiting full-screen counts as a violation.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="flex-shrink-0 h-6 w-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xs font-black">2</span>
+                  <span className="flex-shrink-0 h-6 w-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xs font-bold">2</span>
                   <span className="text-gray-700 text-sm">
                     <strong className="text-gray-900">No Tab Switching</strong> — Switching to another tab or application will be detected and counted as a violation.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="flex-shrink-0 h-6 w-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xs font-black">3</span>
+                  <span className="flex-shrink-0 h-6 w-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xs font-bold">3</span>
                   <span className="text-gray-700 text-sm">
                     <strong className="text-gray-900">Copy/Paste Disabled</strong> — All copy, paste, cut, right-click, and keyboard shortcuts are blocked.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="flex-shrink-0 h-6 w-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xs font-black">4</span>
+                  <span className="flex-shrink-0 h-6 w-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xs font-bold">4</span>
                   <span className="text-gray-700 text-sm">
                     <strong className="text-gray-900">Maximum 3 Violations</strong> — After 3 violations, your quiz will be <strong>automatically submitted</strong> with your current answers.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="flex-shrink-0 h-6 w-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xs font-black">5</span>
+                  <span className="flex-shrink-0 h-6 w-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xs font-bold">5</span>
                   <span className="text-gray-700 text-sm">
                     <strong className="text-gray-900">Timer is Final</strong> — Once the timer runs out, your quiz auto-submits. No extensions.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="flex-shrink-0 h-6 w-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-black">6</span>
+                  <span className="flex-shrink-0 h-6 w-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">6</span>
                   <span className="text-gray-700 text-sm">
                     <strong className="text-gray-900">Navigate Freely</strong> — Use Next, Previous buttons or the question palette to move between questions. Bookmark questions for review.
                   </span>
@@ -423,7 +423,7 @@ const PlayQuiz = () => {
             </div>
 
             {/* XP Bonus Tips */}
-            <div className="mx-6 mb-6 bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-xl p-4">
+              <div className="mx-6 mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-emerald-600 text-lg">⚡</span>
                 <span className="font-bold text-emerald-800 text-sm">Earn Bonus XP!</span>
@@ -444,7 +444,7 @@ const PlayQuiz = () => {
             <div className="p-6 pt-0">
               <button
                 onClick={handleStartQuiz}
-                className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 rounded-xl font-black text-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-200"
+                className="w-full bg-green-600 text-white py-3.5 rounded-lg font-medium text-sm hover:bg-green-700 transition-colors"
               >
                 ✅ I Understand — Start Quiz
               </button>
@@ -469,11 +469,11 @@ const PlayQuiz = () => {
           <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
             {/* Header */}
             <div className={`p-8 text-center ${game.terminatedBySystem 
-              ? 'bg-gradient-to-r from-red-600 to-red-500' 
-              : 'bg-gradient-to-r from-emerald-500 to-teal-600'}`}
+              ? 'bg-red-600' 
+              : 'bg-emerald-600'}`}
             >
               <div className="text-6xl mb-4">{game.terminatedBySystem ? '⛔' : '🎉'}</div>
-              <h2 className="text-3xl font-black text-white mb-2">
+              <h2 className="text-3xl font-bold text-white mb-2">
                 {game.terminatedBySystem ? 'QUIZ TERMINATED' : 'MISSION COMPLETE'}
               </h2>
               <p className="text-white/80">
@@ -511,8 +511,8 @@ const PlayQuiz = () => {
 
               {/* XP Bonus Breakdown */}
               {game.bonuses && (
-                <div className="bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 rounded-2xl border border-indigo-100 p-5 mb-6">
-                  <h3 className="font-black text-sm text-indigo-800 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <div className="bg-indigo-50 rounded-2xl border border-indigo-100 p-5 mb-6">
+                  <h3 className="font-bold text-sm text-indigo-800 uppercase tracking-wider mb-4 flex items-center gap-2">
                     ⚡ XP Breakdown
                   </h3>
                   <div className="space-y-3">
@@ -558,7 +558,7 @@ const PlayQuiz = () => {
                     )}
                     {/* Total */}
                     <div className="flex items-center justify-between border-t border-indigo-200 pt-3 mt-1">
-                      <span className="text-sm font-black text-indigo-800">Total XP</span>
+                      <span className="text-sm font-bold text-indigo-800">Total XP</span>
                       <span className="font-black text-lg text-indigo-700">{game.xpEarned}</span>
                     </div>
                   </div>
@@ -618,7 +618,7 @@ const PlayQuiz = () => {
                 <button
                   onClick={handleGenerateAISummary}
                   disabled={aiLoading || aiCreditsNeeded}
-                  className="w-full mb-4 bg-gradient-to-r from-violet-500 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:from-violet-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-purple-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-3"
+                  className="w-full mb-4 bg-blue-600 text-white py-3.5 rounded-lg font-medium text-sm hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                 >
                   {aiLoading ? (
                     <>
@@ -703,9 +703,9 @@ const PlayQuiz = () => {
 const ResumeDialog = ({ savedProgress, onResume, onStartFresh }) => (
   <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
     <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white text-center">
-        <div className="text-4xl mb-2">💾</div>
-        <h3 className="text-xl font-black">Resume Quiz?</h3>
+            <div className="bg-blue-600 p-6 text-white text-center">
+        <div className="text-3xl mb-2">💾</div>
+        <h3 className="text-xl font-bold">Resume Quiz?</h3>
         <p className="text-blue-200 text-sm mt-1">You have unsaved progress</p>
       </div>
       <div className="p-6">
@@ -743,7 +743,7 @@ const ResumeDialog = ({ savedProgress, onResume, onStartFresh }) => (
           </button>
           <button
             onClick={onResume}
-            className="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-sm hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg shadow-blue-200"
+            className="flex-1 py-3 rounded-lg bg-blue-600 text-white font-medium text-sm hover:bg-blue-700 transition-colors"
           >
             ▶️ Resume Quiz
           </button>
@@ -806,23 +806,23 @@ const QuestionBreakdown = ({ questions }) => (
 
 // AI Summary Card Component
 const AISummaryCard = ({ summary }) => (
-  <div className="mb-6 bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50 rounded-2xl border-2 border-purple-100 overflow-hidden">
+  <div className="mb-6 bg-gray-50 rounded-xl border border-gray-200 overflow-hidden">
     {/* Header */}
-    <div className="bg-gradient-to-r from-violet-600 to-purple-600 px-6 py-4 flex items-center gap-3">
+    <div className="bg-blue-600 px-6 py-4 flex items-center gap-3">
       <span className="text-2xl">🤖</span>
       <div>
-        <h3 className="text-white font-black text-lg">AI Performance Analysis</h3>
-        <p className="text-purple-200 text-xs">Powered by Google Gemini</p>
+        <h3 className="text-white font-bold text-lg">AI Performance Analysis</h3>
+        <p className="text-blue-200 text-xs">Powered by Google Gemini</p>
       </div>
     </div>
 
     <div className="p-6 space-y-5">
       {/* Overall Assessment */}
       <div>
-        <h4 className="font-bold text-purple-800 text-sm mb-2 flex items-center gap-2">
+        <h4 className="font-semibold text-gray-800 text-sm mb-2 flex items-center gap-2">
           📝 Overall Assessment
         </h4>
-        <p className="text-gray-700 text-sm leading-relaxed bg-white/60 rounded-xl p-4">
+        <p className="text-gray-700 text-sm leading-relaxed bg-white rounded-lg p-4">
           {summary.overallAssessment}
         </p>
       </div>
@@ -869,9 +869,9 @@ const AISummaryCard = ({ summary }) => (
           </h4>
           <div className="space-y-3">
             {summary.wrongAnswerAnalysis.map((item, i) => (
-              <div key={i} className="bg-white/70 rounded-xl p-4 border border-purple-100">
+              <div key={i} className="bg-white rounded-lg p-4 border border-gray-200">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="bg-purple-100 text-purple-700 text-xs font-bold px-2 py-0.5 rounded-full">
+                  <span className="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded">
                     Q{item.questionNumber}
                   </span>
                   <span className="text-purple-600 text-xs font-medium">{item.topic}</span>
@@ -902,7 +902,7 @@ const AISummaryCard = ({ summary }) => (
 
       {/* Encouragement */}
       {summary.encouragement && (
-        <div className="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-xl p-4 border border-amber-200 text-center">
+        <div className="bg-amber-50 rounded-lg p-4 border border-amber-200 text-center">
           <span className="text-2xl mb-2 block">🌟</span>
           <p className="text-amber-800 text-sm font-medium italic">{summary.encouragement}</p>
         </div>

@@ -77,7 +77,7 @@ const TeacherDashboard = () => {
             </span>
             <Link 
               to="/dashboard/teacher/quizzes"
-              className="bg-purple-600 text-white px-4 py-2 rounded shadow font-semibold hover:bg-purple-700 flex items-center"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors"
             >
               Manage Quizzes
             </Link>
@@ -116,7 +116,7 @@ const TeacherDashboard = () => {
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
         {/* Emergency Header */}
         <div className="bg-red-700 p-6 text-white text-center animate-pulse">
-          <h1 className="text-4xl font-black uppercase tracking-widest">
+          <h1 className="text-3xl font-bold uppercase tracking-wider">
             {activeAlert.type} ALERT
           </h1>
           <p className="mt-2 text-red-100 font-semibold text-lg">{activeAlert.message}</p>

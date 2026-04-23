@@ -105,12 +105,12 @@ const GuideManager = () => {
                 key={guide._id}
                 className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group"
               >
-                {/* Gradient Header */}
-                <div className={`h-28 bg-gradient-to-r ${colors.gradient} flex items-center justify-center relative`}>
-                  <span className="text-5xl drop-shadow-lg group-hover:scale-110 transition-transform duration-300">
+                {/* Card Header */}
+                <div className="bg-gray-50 border-b border-gray-100 h-24 flex items-center justify-center relative">
+                  <span className="text-4xl">
                     {guide.coverEmoji || "📖"}
                   </span>
-                  <span className={`absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-bold ${colors.bg} ${colors.text} ${colors.border} border backdrop-blur-sm`}>
+                  <span className={`absolute top-3 right-3 px-2 py-1 rounded text-xs font-medium ${colors.bg} ${colors.text}`}>
                     {guide.category || "General"}
                   </span>
                 </div>

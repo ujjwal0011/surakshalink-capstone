@@ -5,10 +5,10 @@ import toast from 'react-hot-toast';
 
 // ─── Credit Packages (mirrors backend) ───
 const CREDIT_PACKAGES = [
-  { id: 'starter',  credits: 2,  cost: 100, emoji: '⚡', label: 'Starter Pack',  description: 'A quick top-up for light usage.' },
-  { id: 'standard', credits: 5,  cost: 200, emoji: '🔋', label: 'Standard Pack', description: 'Best value for regular learners.' },
-  { id: 'bulk',     credits: 10, cost: 350, emoji: '💎', label: 'Bulk Pack',     description: 'Power through your study sessions.' },
-  { id: 'mega',     credits: 25, cost: 750, emoji: '🔥', label: 'Mega Pack',     description: 'Become an AI-powered disaster expert!' },
+  { id: 'starter', credits: 2, cost: 100, emoji: '⚡', label: 'Starter Pack', description: 'A quick top-up for light usage.' },
+  { id: 'standard', credits: 5, cost: 200, emoji: '🔋', label: 'Standard Pack', description: 'Best value for regular learners.' },
+  { id: 'bulk', credits: 10, cost: 350, emoji: '💎', label: 'Bulk Pack', description: 'Power through your study sessions.' },
+  { id: 'mega', credits: 25, cost: 750, emoji: '🔥', label: 'Mega Pack', description: 'Become an AI-powered disaster expert!' },
 ];
 
 const StudentAI = () => {
@@ -159,7 +159,7 @@ const StudentAI = () => {
   // Fetch XP when credits tab is opened
   useEffect(() => {
     if (activeTab === 'credits') {
-      api.get('/users/me').then(({ data }) => setTotalXP(data.totalXP)).catch(() => {});
+      api.get('/users/me').then(({ data }) => setTotalXP(data.totalXP)).catch(() => { });
       fetchCredits();
     }
   }, [activeTab]);
@@ -175,41 +175,39 @@ const StudentAI = () => {
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 bg-gradient-to-br from-violet-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-200">
+            <div className="h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center">
               <span className="text-white text-lg">🤖</span>
             </div>
             <div>
-              <h1 className="text-xl font-black text-gray-900 tracking-tight">AI Assistant</h1>
+              <h1 className="text-xl font-bold text-gray-900">AI Assistant</h1>
               <p className="text-xs text-gray-400">Powered by SurakshaBot</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             {/* Credit Badge */}
-            <div className="bg-gradient-to-r from-violet-50 to-purple-50 border border-purple-200 rounded-xl px-4 py-2 flex items-center gap-2">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-2 flex items-center gap-2">
               <span className="text-sm">⚡</span>
-              <span className="font-black text-purple-700 text-sm">{totalCredits} Credits</span>
+              <span className="font-bold text-blue-700 text-sm">{totalCredits} Credits</span>
             </div>
 
             {/* Tab Buttons */}
             <div className="flex bg-gray-100 rounded-lg p-1">
               <button
                 onClick={() => setActiveTab('chat')}
-                className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${
-                  activeTab === 'chat'
+                className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${activeTab === 'chat'
                     ? 'bg-white text-gray-900 shadow-sm'
                     : 'text-gray-500 hover:text-gray-700'
-                }`}
+                  }`}
               >
                 🤖 Chat
               </button>
               <button
                 onClick={() => setActiveTab('credits')}
-                className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${
-                  activeTab === 'credits'
+                className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${activeTab === 'credits'
                     ? 'bg-white text-gray-900 shadow-sm'
                     : 'text-gray-500 hover:text-gray-700'
-                }`}
+                  }`}
               >
                 ⚡ Credits
               </button>
@@ -277,7 +275,7 @@ const ChatView = ({
           <div className="p-4 border-b border-gray-100">
             <button
               onClick={onStartNew}
-              className="w-full bg-gradient-to-r from-violet-600 to-purple-600 text-white py-3 rounded-xl font-bold text-sm hover:from-violet-700 hover:to-purple-700 transition-all shadow-lg shadow-purple-200 flex items-center justify-center gap-2"
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium text-sm hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
             >
               ✨ New Conversation
             </button>
@@ -299,11 +297,10 @@ const ChatView = ({
                 <div
                   key={conv._id}
                   onClick={() => onLoadConversation(conv._id)}
-                  className={`group p-3 rounded-xl cursor-pointer transition-all duration-200 flex items-start justify-between ${
-                    activeConversation?._id === conv._id
+                  className={`group p-3 rounded-xl cursor-pointer transition-all duration-200 flex items-start justify-between ${activeConversation?._id === conv._id
                       ? 'bg-purple-50 border-2 border-purple-200'
                       : 'hover:bg-gray-50 border-2 border-transparent'
-                  }`}
+                    }`}
                 >
                   <div className="flex-1 min-w-0">
                     <h4 className="text-sm font-bold text-gray-800 truncate">{conv.title}</h4>
@@ -367,15 +364,15 @@ const ChatView = ({
           )}
           {sending && (
             <div className="flex items-start gap-3">
-              <div className="h-8 w-8 bg-gradient-to-br from-violet-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-xs">🤖</span>
               </div>
               <div className="bg-white rounded-2xl rounded-tl-md px-5 py-3 shadow-sm border border-gray-100">
                 <div className="flex items-center gap-2">
                   <div className="flex gap-1">
-                    <span className="h-2 w-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                    <span className="h-2 w-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                    <span className="h-2 w-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                    <span className="h-2 w-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                    <span className="h-2 w-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                    <span className="h-2 w-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
                   </div>
                   <span className="text-xs text-gray-400">SurakshaBot is thinking...</span>
                 </div>
@@ -400,13 +397,13 @@ const ChatView = ({
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && onSend()}
                 placeholder="Ask about earthquake safety, flood preparedness, first aid..."
-                className="flex-1 bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-300 focus:ring-4 focus:ring-purple-100 transition-all placeholder:text-gray-400"
+                className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all placeholder:text-gray-400"
                 disabled={sending}
               />
               <button
                 onClick={onSend}
                 disabled={!inputMessage.trim() || sending}
-                className="bg-gradient-to-r from-violet-600 to-purple-600 text-white px-6 py-3 rounded-xl font-bold text-sm hover:from-violet-700 hover:to-purple-700 transition-all shadow-lg shadow-purple-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none flex items-center gap-2"
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium text-sm hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {sending ? (
                   <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
@@ -430,10 +427,10 @@ const ChatView = ({
 const WelcomeScreen = () => (
   <div className="flex-1 flex items-center justify-center h-full">
     <div className="max-w-md text-center">
-      <div className="h-20 w-20 bg-gradient-to-br from-violet-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-purple-200">
+      <div className="h-20 w-20 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
         <span className="text-4xl">🛡️</span>
       </div>
-      <h2 className="text-2xl font-black text-gray-900 mb-2">SurakshaBot</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-2">SurakshaBot</h2>
       <p className="text-gray-500 text-sm mb-8">Your AI disaster preparedness assistant. Ask anything about safety, emergencies, and survival!</p>
 
       <div className="grid grid-cols-1 gap-3 text-left">
@@ -443,7 +440,7 @@ const WelcomeScreen = () => (
           { q: 'What are the NDRF helpline numbers?', icon: '📞' },
           { q: 'How to give first aid for burn injuries?', icon: '🩹' },
         ].map((item, i) => (
-          <div key={i} className="bg-white rounded-xl border-2 border-gray-100 p-4 hover:border-purple-200 hover:shadow-sm transition-all cursor-default">
+          <div key={i} className="bg-white rounded-lg border border-gray-200 p-4 hover:border-blue-200 hover:shadow-sm transition-all cursor-default">
             <div className="flex items-center gap-3">
               <span className="text-xl">{item.icon}</span>
               <span className="text-sm text-gray-700 font-medium">{item.q}</span>
@@ -466,20 +463,18 @@ const MessageBubble = ({ message }) => {
   return (
     <div className={`flex items-start gap-3 ${isUser ? 'flex-row-reverse' : ''}`}>
       {/* Avatar */}
-      <div className={`h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-        isUser
-          ? 'bg-gradient-to-br from-blue-500 to-cyan-500'
-          : 'bg-gradient-to-br from-violet-500 to-purple-600'
-      }`}>
+      <div className={`h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 ${isUser
+          ? 'bg-gray-600'
+          : 'bg-blue-600'
+        }`}>
         <span className="text-white text-xs">{isUser ? '👤' : '🤖'}</span>
       </div>
 
       {/* Message Content */}
-      <div className={`max-w-[75%] ${
-        isUser
-          ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-2xl rounded-tr-md'
+      <div className={`max-w-[75%] ${isUser
+          ? 'bg-gray-800 text-white rounded-2xl rounded-tr-md'
           : 'bg-white text-gray-800 rounded-2xl rounded-tl-md border border-gray-100 shadow-sm'
-      } px-5 py-3`}>
+        } px-5 py-3`}>
         <div className={`text-sm leading-relaxed whitespace-pre-wrap ${isUser ? '' : 'chat-response'}`}>
           {message.content}
         </div>
@@ -505,7 +500,7 @@ const CreditCenter = ({ credits, totalXP, purchasing, confirmPkg, setConfirmPkg,
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8 hover:shadow-md transition">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-lg font-black text-gray-800 flex items-center gap-2">
+            <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
               ⚡ Credit Balance
               <span className="text-xs font-bold text-purple-600 bg-purple-50 px-2 py-1 rounded-full">
                 {totalCredits} Total
@@ -513,9 +508,9 @@ const CreditCenter = ({ credits, totalXP, purchasing, confirmPkg, setConfirmPkg,
             </h2>
             <p className="text-gray-400 text-xs mt-1">Free credits roll over daily (capped). Purchased never expire.</p>
           </div>
-          <div className="bg-gradient-to-r from-yellow-100 to-amber-100 border border-yellow-200 rounded-xl px-4 py-2 flex items-center gap-2">
+          <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 flex items-center gap-2">
             <span className="text-lg">💰</span>
-            <span className="font-black text-yellow-700 text-lg">{totalXP} XP</span>
+            <span className="font-bold text-gray-700 text-lg">{totalXP} XP</span>
           </div>
         </div>
 
@@ -552,8 +547,8 @@ const CreditCenter = ({ credits, totalXP, purchasing, confirmPkg, setConfirmPkg,
       </div>
 
       {/* How Credits Work */}
-      <div className="bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50 rounded-2xl border-2 border-purple-100 p-6 mb-8">
-        <h3 className="font-black text-purple-800 text-sm uppercase tracking-widest mb-4 flex items-center gap-2">
+      <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 mb-8">
+        <h3 className="font-bold text-gray-700 text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
           📋 How Credits Work
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -580,7 +575,7 @@ const CreditCenter = ({ credits, totalXP, purchasing, confirmPkg, setConfirmPkg,
       {/* Credit Packages */}
       <div className="mb-4">
         <div className="flex items-center gap-3 mb-4">
-          <span className="text-xs font-black uppercase tracking-widest text-gray-400">🛒 Credit Packs</span>
+          <span className="text-xs font-bold uppercase tracking-wider text-gray-400">🛒 Credit Packs</span>
           <div className="flex-1 h-px bg-gray-200"></div>
         </div>
 
@@ -590,34 +585,33 @@ const CreditCenter = ({ credits, totalXP, purchasing, confirmPkg, setConfirmPkg,
             return (
               <div
                 key={pkg.id}
-                className={`bg-white rounded-2xl border-2 overflow-hidden transition-all duration-300 ${
-                  canAfford
-                    ? 'border-gray-200 hover:border-purple-300 hover:shadow-lg hover:-translate-y-1'
+                className={`bg-white rounded-xl border overflow-hidden transition-all ${canAfford
+                    ? 'border-gray-200 hover:border-blue-300 hover:shadow-md'
                     : 'border-gray-100 opacity-50'
-                }`}
+                  }`}
               >
-                <div className="bg-gradient-to-br from-violet-500 to-purple-600 h-20 flex items-center justify-center">
-                  <span className="text-4xl filter drop-shadow-md">{pkg.emoji}</span>
+                <div className="bg-gray-50 border-b border-gray-100 h-20 flex items-center justify-center">
+                  <span className="text-4xl">{pkg.emoji}</span>
                 </div>
                 <div className="p-5">
-                  <h3 className="font-black text-gray-800 text-lg mb-1">{pkg.label}</h3>
+                  <h3 className="font-bold text-gray-800 text-lg mb-1">{pkg.label}</h3>
                   <p className="text-gray-400 text-xs mb-3">{pkg.description}</p>
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs font-bold text-purple-600 bg-purple-50 px-2 py-1 rounded-full">
+                    <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
                       +{pkg.credits} credits
                     </span>
-                    <span className="text-xs font-bold text-gray-500">{pkg.cost} XP</span>
+                    <span className="text-xs font-medium text-gray-500">{pkg.cost} XP</span>
                   </div>
                   {canAfford ? (
                     <button
                       onClick={() => setConfirmPkg(pkg)}
                       disabled={purchasing === pkg.id}
-                      className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 text-white font-bold text-sm hover:from-violet-700 hover:to-purple-700 transition-all shadow-lg shadow-purple-200 disabled:opacity-50"
+                      className="w-full py-2.5 rounded-lg bg-blue-600 text-white font-medium text-sm hover:bg-blue-700 transition-colors disabled:opacity-50"
                     >
                       {purchasing === pkg.id ? 'Purchasing...' : `Buy · ${pkg.cost} XP`}
                     </button>
                   ) : (
-                    <div className="w-full text-center py-3 rounded-xl bg-gray-50 text-gray-400 font-bold text-sm border border-gray-100">
+                    <div className="w-full text-center py-2.5 rounded-lg bg-gray-50 text-gray-400 font-medium text-sm border border-gray-100">
                       🔒 Need {pkg.cost - totalXP} more XP
                     </div>
                   )}
@@ -631,17 +625,17 @@ const CreditCenter = ({ credits, totalXP, purchasing, confirmPkg, setConfirmPkg,
       {/* Purchase Confirmation Modal */}
       {confirmPkg && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden">
-            <div className="bg-gradient-to-br from-violet-500 to-purple-600 h-28 flex items-center justify-center">
-              <span className="text-6xl filter drop-shadow-lg">{confirmPkg.emoji}</span>
+          <div className="bg-white rounded-2xl shadow-lg max-w-sm w-full overflow-hidden">
+            <div className="bg-gray-50 border-b border-gray-200 h-24 flex items-center justify-center">
+              <span className="text-5xl">{confirmPkg.emoji}</span>
             </div>
             <div className="p-6">
-              <h3 className="text-xl font-black text-gray-900 text-center mb-1">
+              <h3 className="text-xl font-bold text-gray-900 text-center mb-1">
                 Purchase {confirmPkg.label}?
               </h3>
               <p className="text-gray-400 text-sm text-center mb-6">+{confirmPkg.credits} AI credits</p>
 
-              <div className="bg-gray-50 rounded-xl p-4 mb-6 space-y-2">
+              <div className="bg-gray-50 rounded-lg p-4 mb-6 space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500">Current XP</span>
                   <span className="font-bold text-gray-700">{totalXP} XP</span>
@@ -652,14 +646,14 @@ const CreditCenter = ({ credits, totalXP, purchasing, confirmPkg, setConfirmPkg,
                 </div>
                 <div className="border-t border-gray-200 pt-2 flex justify-between text-sm">
                   <span className="font-bold text-gray-700">Remaining</span>
-                  <span className="font-black text-purple-600">{totalXP - confirmPkg.cost} XP</span>
+                  <span className="font-bold text-blue-600">{totalXP - confirmPkg.cost} XP</span>
                 </div>
               </div>
 
               <button
                 onClick={() => onPurchase(confirmPkg)}
                 disabled={purchasing === confirmPkg.id}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 text-white font-black text-base hover:from-violet-700 hover:to-purple-700 transition-all shadow-lg shadow-purple-200 disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {purchasing === confirmPkg.id ? (
                   <>

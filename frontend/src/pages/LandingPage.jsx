@@ -47,8 +47,6 @@ const LandingPage = () => {
     return <Navigate to={dashboardPath} replace />;
   }
 
-  const [featuresRef, featuresInView] = useInView(0.1);
-  const [howItWorksRef, howItWorksInView] = useInView(0.1);
   const [statsRef, statsInView] = useInView(0.3);
 
   const schoolCount = useCounter(150, 2000, statsInView);
@@ -58,126 +56,110 @@ const LandingPage = () => {
 
   const features = [
     {
-      icon: '🚨',
       title: 'Real-Time Emergency Alerts',
       description: 'Instantly broadcast fire, earthquake, or custom alerts to every teacher and student. Live tracking of safety responses.',
-      gradient: 'from-red-500 to-orange-500',
-      shadowColor: 'shadow-red-500/20',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+      ),
     },
     {
-      icon: '🏃',
       title: 'Safety Drill Management',
       description: 'Conduct and monitor evacuation drills with real-time roll calls. Mark students safe with one click across all classrooms.',
-      gradient: 'from-blue-500 to-cyan-500',
-      shadowColor: 'shadow-blue-500/20',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+      ),
     },
     {
-      icon: '📝',
       title: 'Gamified Quiz Training',
       description: 'Engage students with interactive safety quizzes in secure exam mode. Anti-cheat protection ensures honest assessments.',
-      gradient: 'from-purple-500 to-pink-500',
-      shadowColor: 'shadow-purple-500/20',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+        </svg>
+      ),
     },
     {
-      icon: '📊',
       title: 'Analytics Dashboard',
       description: 'Track school-wide safety performance with detailed analytics. Monitor drill response times and quiz scores across classes.',
-      gradient: 'from-emerald-500 to-teal-500',
-      shadowColor: 'shadow-emerald-500/20',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      ),
     },
   ];
 
   const steps = [
     {
-      step: '01',
+      step: '1',
       title: 'Register Your School',
       description: 'Principal creates the school account and gets a unique school code. Teachers and students join using the code.',
-      icon: '🏫',
     },
     {
-      step: '02',
+      step: '2',
       title: 'Conduct Safety Drills',
       description: 'Trigger emergency alerts, manage real-time evacuations, and track which students have been marked safe.',
-      icon: '🔔',
     },
     {
-      step: '03',
+      step: '3',
       title: 'Train & Track Progress',
       description: 'Students take gamified safety quizzes. Principals and teachers monitor performance analytics for continuous improvement.',
-      icon: '📈',
     },
   ];
 
   return (
-    <div className="bg-slate-950 text-white overflow-hidden">
+    <div className="bg-white text-gray-900">
       <PublicNavbar />
 
       {/* ═══════════════════════════════════════════ */}
       {/* HERO SECTION */}
       {/* ═══════════════════════════════════════════ */}
-      <section id="hero" className="relative min-h-screen flex items-center justify-center pt-20">
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900" />
-
-        {/* Animated background orbs */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }} />
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
-
-        {/* Grid pattern overlay */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }} />
-
-        <div className="relative z-10 max-w-5xl mx-auto px-4 text-center">
+      <section id="hero" className="pt-32 pb-20 px-4">
+        <div className="max-w-3xl mx-auto text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 animate-fade-in-up">
-            <span className="h-2 w-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-sm font-semibold text-slate-300">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-6">
+            <span className="h-1.5 w-1.5 bg-blue-500 rounded-full" />
+            <span className="text-sm font-medium text-blue-700">
               Trusted by Schools Across India
             </span>
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight mb-6 animate-fade-in-up delay-100" style={{ opacity: 0 }}>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-6 text-gray-900">
             Protect Every Student.
             <br />
-            <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">
+            <span className="text-blue-600">
               Prepare Every School.
             </span>
           </h1>
 
           {/* Subtext */}
-          <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-in-up delay-200" style={{ opacity: 0 }}>
+          <p className="text-lg text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed">
             SurakshaLink is a real-time disaster preparedness platform for schools.
             Manage emergency alerts, conduct safety drills, train students with gamified quizzes,
             and track school-wide safety analytics — all in one place.
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-300" style={{ opacity: 0 }}>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               to="/register-principal"
               id="cta-register"
-              className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl font-bold text-lg shadow-2xl shadow-blue-600/30 hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105"
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium text-white transition-colors"
             >
-              <span className="relative z-10">Register Your School</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              Register Your School
             </Link>
             <Link
               to="/login"
               id="cta-login"
-              className="px-8 py-4 rounded-2xl font-bold text-lg border-2 border-white/20 hover:border-white/40 hover:bg-white/5 transition-all duration-300 text-slate-300 hover:text-white"
+              className="px-6 py-3 rounded-lg font-medium text-gray-600 hover:text-gray-900 border border-gray-200 hover:border-gray-300 transition-all"
             >
               Sign In →
             </Link>
-          </div>
-
-          {/* Scroll indicator */}
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-            <svg className="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
           </div>
         </div>
       </section>
@@ -185,45 +167,34 @@ const LandingPage = () => {
       {/* ═══════════════════════════════════════════ */}
       {/* FEATURES SECTION */}
       {/* ═══════════════════════════════════════════ */}
-      <section id="features" ref={featuresRef} className="relative py-24 px-4">
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950" />
-
-        <div className="relative z-10 max-w-6xl mx-auto">
+      <section id="features" className="py-20 px-4 bg-gray-50">
+        <div className="max-w-5xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-blue-500/10 text-blue-400 text-sm font-bold tracking-wider uppercase mb-4">
+          <div className="text-center mb-14">
+            <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">
               Features
-            </span>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
-              Everything You Need for
-              <br />
-              <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                School Safety
-              </span>
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-3">
+              Everything You Need for School Safety
             </h2>
-            <p className="text-slate-400 text-lg max-w-xl mx-auto">
+            <p className="text-gray-500 text-base max-w-xl mx-auto">
               From real-time emergency alerts to gamified training — a complete safety ecosystem.
             </p>
           </div>
 
           {/* Feature Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {features.map((feature, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {features.map((feature) => (
               <div
                 key={feature.title}
-                className={`group relative rounded-2xl p-8 glass hover:bg-white/[0.06] transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl ${feature.shadowColor} ${featuresInView ? 'animate-fade-in-up' : 'opacity-0'
-                  }`}
-                style={{ animationDelay: `${i * 0.15}s`, opacity: featuresInView ? undefined : 0 }}
+                className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow"
               >
-                {/* Gradient border accent */}
-                <div className={`absolute top-0 left-8 right-8 h-[2px] bg-gradient-to-r ${feature.gradient} rounded-full opacity-50 group-hover:opacity-100 transition-opacity`} />
-
-                <div className={`inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-gradient-to-br ${feature.gradient} shadow-lg mb-6`}>
-                  <span className="text-2xl">{feature.icon}</span>
+                <div className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-blue-50 text-blue-600 mb-4">
+                  {feature.icon}
                 </div>
 
-                <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-                <p className="text-slate-400 leading-relaxed">{feature.description}</p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -233,47 +204,29 @@ const LandingPage = () => {
       {/* ═══════════════════════════════════════════ */}
       {/* HOW IT WORKS SECTION */}
       {/* ═══════════════════════════════════════════ */}
-      <section id="how-it-works" ref={howItWorksRef} className="relative py-24 px-4">
-        <div className="absolute inset-0 bg-slate-900" />
-
-        <div className="relative z-10 max-w-5xl mx-auto">
+      <section id="how-it-works" className="py-20 px-4">
+        <div className="max-w-4xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-20">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 text-sm font-bold tracking-wider uppercase mb-4">
+          <div className="text-center mb-14">
+            <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">
               How It Works
-            </span>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
-              Get Started in{' '}
-              <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                3 Simple Steps
-              </span>
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900">
+              Get Started in 3 Simple Steps
             </h2>
           </div>
 
           {/* Steps */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {steps.map((step, i) => (
-              <div
-                key={step.step}
-                className={`relative text-center ${howItWorksInView ? 'animate-fade-in-up' : 'opacity-0'
-                  }`}
-                style={{ animationDelay: `${i * 0.2}s`, opacity: howItWorksInView ? undefined : 0 }}
-              >
-                {/* Connector line */}
-                {i < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-16 left-[60%] w-[80%] h-[2px] bg-gradient-to-r from-slate-700 to-transparent" />
-                )}
-
+              <div key={step.step} className="text-center">
                 {/* Step Number */}
-                <div className="inline-flex items-center justify-center h-32 w-32 rounded-3xl glass mb-6 relative">
-                  <span className="text-5xl">{step.icon}</span>
-                  <span className="absolute -top-2 -right-2 h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-xs font-black shadow-lg">
-                    {step.step}
-                  </span>
+                <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-blue-600 text-white font-bold text-lg mb-5">
+                  {step.step}
                 </div>
 
-                <h3 className="text-xl font-bold text-white mb-3">{step.title}</h3>
-                <p className="text-slate-400 leading-relaxed max-w-xs mx-auto">{step.description}</p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{step.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{step.description}</p>
               </div>
             ))}
           </div>
@@ -283,39 +236,32 @@ const LandingPage = () => {
       {/* ═══════════════════════════════════════════ */}
       {/* IMPACT / STATS SECTION */}
       {/* ═══════════════════════════════════════════ */}
-      <section id="impact" ref={statsRef} className="relative py-24 px-4">
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-blue-950 to-slate-950" />
-
-        <div className="relative z-10 max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-purple-500/10 text-purple-400 text-sm font-bold tracking-wider uppercase mb-4">
+      <section id="impact" ref={statsRef} className="py-20 px-4 bg-gray-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">
               Our Impact
-            </span>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight">
-              Making Schools{' '}
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Safer Every Day
-              </span>
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900">
+              Making Schools Safer Every Day
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { value: schoolCount, suffix: '+', label: 'Schools Protected', gradient: 'from-blue-500 to-cyan-500' },
-              { value: drillCount.toLocaleString(), suffix: '+', label: 'Drills Conducted', gradient: 'from-emerald-500 to-teal-500' },
-              { value: studentCount.toLocaleString(), suffix: '+', label: 'Students Trained', gradient: 'from-purple-500 to-pink-500' },
-              { value: responseTime, suffix: 's avg', label: 'Response Time', gradient: 'from-amber-500 to-orange-500' },
-            ].map((stat, i) => (
+              { value: schoolCount, suffix: '+', label: 'Schools Protected' },
+              { value: drillCount.toLocaleString(), suffix: '+', label: 'Drills Conducted' },
+              { value: studentCount.toLocaleString(), suffix: '+', label: 'Students Trained' },
+              { value: responseTime, suffix: 's avg', label: 'Response Time' },
+            ].map((stat) => (
               <div
                 key={stat.label}
-                className={`glass rounded-2xl p-6 text-center hover:bg-white/[0.06] transition-all duration-300 ${statsInView ? 'animate-fade-in-up' : 'opacity-0'
-                  }`}
-                style={{ animationDelay: `${i * 0.1}s`, opacity: statsInView ? undefined : 0 }}
+                className="bg-white rounded-xl border border-gray-200 p-6 text-center"
               >
-                <span className={`text-4xl sm:text-5xl font-black bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent`}>
+                <span className="text-3xl sm:text-4xl font-bold text-gray-900">
                   {stat.value}{stat.suffix}
                 </span>
-                <p className="text-slate-400 text-sm font-semibold mt-2 uppercase tracking-wider">{stat.label}</p>
+                <p className="text-gray-500 text-xs font-medium mt-2 uppercase tracking-wider">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -325,26 +271,25 @@ const LandingPage = () => {
       {/* ═══════════════════════════════════════════ */}
       {/* CTA BANNER */}
       {/* ═══════════════════════════════════════════ */}
-      <section className="relative py-20 px-4">
-        <div className="absolute inset-0 bg-slate-950" />
-        <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <div className="glass rounded-3xl p-10 sm:p-14 animate-pulse-glow">
-            <h2 className="text-3xl sm:text-4xl font-black mb-4">
+      <section className="py-20 px-4">
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="bg-blue-50 border border-blue-100 rounded-2xl p-10 sm:p-14">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
               Ready to Make Your School Safer?
             </h2>
-            <p className="text-slate-400 text-lg mb-8 max-w-xl mx-auto">
+            <p className="text-gray-500 mb-8 max-w-lg mx-auto">
               Join hundreds of schools already using SurakshaLink to protect their students and prepare for emergencies.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 to="/register-principal"
-                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl font-bold text-lg shadow-2xl shadow-blue-600/30 hover:scale-105 transition-all duration-300"
+                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium text-white transition-colors"
               >
                 Get Started Free
               </Link>
               <Link
                 to="/login"
-                className="px-8 py-4 rounded-2xl font-bold text-lg border border-white/20 hover:border-white/40 hover:bg-white/5 transition-all text-slate-300 hover:text-white"
+                className="px-6 py-3 rounded-lg font-medium text-gray-600 hover:text-gray-900 border border-gray-200 hover:border-gray-300 transition-all"
               >
                 I Already Have an Account
               </Link>
@@ -356,20 +301,15 @@ const LandingPage = () => {
       {/* ═══════════════════════════════════════════ */}
       {/* FOOTER */}
       {/* ═══════════════════════════════════════════ */}
-      <footer className="border-t border-white/5 bg-slate-950">
-        <div className="max-w-6xl mx-auto px-4 py-12">
+      <footer className="border-t border-gray-200 bg-gray-50">
+        <div className="max-w-5xl mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Brand */}
             <div className="md:col-span-2">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="h-9 w-9 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-black text-sm">SL</span>
-                </div>
-                <span className="text-white font-extrabold text-xl">
-                  Suraksha<span className="text-cyan-400">Link</span>
-                </span>
-              </div>
-              <p className="text-slate-500 text-sm max-w-sm leading-relaxed">
+              <span className="text-gray-900 font-bold text-xl">
+                Suraksha<span className="text-blue-600">Link</span>
+              </span>
+              <p className="text-gray-500 text-sm max-w-sm leading-relaxed mt-3">
                 A comprehensive disaster preparedness and safety management platform designed for schools.
                 Built with the mission to make every student safer.
               </p>
@@ -377,31 +317,31 @@ const LandingPage = () => {
 
             {/* Quick Links */}
             <div>
-              <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4">Platform</h4>
+              <h4 className="text-gray-900 font-semibold text-sm mb-4">Platform</h4>
               <ul className="space-y-2">
-                <li><a href="#features" className="text-slate-500 hover:text-slate-300 text-sm transition-colors">Features</a></li>
-                <li><a href="#how-it-works" className="text-slate-500 hover:text-slate-300 text-sm transition-colors">How It Works</a></li>
-                <li><Link to="/login" className="text-slate-500 hover:text-slate-300 text-sm transition-colors">Login</Link></li>
+                <li><a href="#features" className="text-gray-500 hover:text-gray-700 text-sm transition-colors">Features</a></li>
+                <li><a href="#how-it-works" className="text-gray-500 hover:text-gray-700 text-sm transition-colors">How It Works</a></li>
+                <li><Link to="/login" className="text-gray-500 hover:text-gray-700 text-sm transition-colors">Login</Link></li>
               </ul>
             </div>
 
             {/* Registration */}
             <div>
-              <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4">Join As</h4>
+              <h4 className="text-gray-900 font-semibold text-sm mb-4">Join As</h4>
               <ul className="space-y-2">
-                <li><Link to="/register-principal" className="text-slate-500 hover:text-slate-300 text-sm transition-colors">Register School</Link></li>
-                <li><Link to="/register-teacher" className="text-slate-500 hover:text-slate-300 text-sm transition-colors">Join as Teacher</Link></li>
-                <li><Link to="/register-student" className="text-slate-500 hover:text-slate-300 text-sm transition-colors">Join as Student</Link></li>
+                <li><Link to="/register-principal" className="text-gray-500 hover:text-gray-700 text-sm transition-colors">Register School</Link></li>
+                <li><Link to="/register-teacher" className="text-gray-500 hover:text-gray-700 text-sm transition-colors">Join as Teacher</Link></li>
+                <li><Link to="/register-student" className="text-gray-500 hover:text-gray-700 text-sm transition-colors">Join as Student</Link></li>
               </ul>
             </div>
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-white/5 mt-10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-slate-600 text-sm">
+          <div className="border-t border-gray-200 mt-10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-gray-400 text-sm">
               © {new Date().getFullYear()} SurakshaLink. All rights reserved.
             </p>
-            <p className="text-slate-600 text-sm">
+            <p className="text-gray-400 text-sm">
               Made with ❤️ for student safety
             </p>
           </div>

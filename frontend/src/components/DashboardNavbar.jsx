@@ -62,13 +62,11 @@ const DashboardNavbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to={`/dashboard/${user?.role}`} className="flex items-center gap-2.5 group">
-            <div className="h-8 w-8 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-lg flex items-center justify-center shadow-md shadow-blue-500/20">
-              <span className="text-white font-black text-xs">SL</span>
-            </div>
-            <span className="text-slate-900 font-extrabold text-lg tracking-tight hidden sm:inline">
+          <Link to={`/dashboard/${user?.role}`} className="flex items-center gap-2">
+            <span className="text-gray-900 font-bold text-lg tracking-tight hidden sm:inline">
               Suraksha<span className="text-blue-600">Link</span>
             </span>
+            <span className="text-gray-900 font-bold text-lg sm:hidden">SL</span>
           </Link>
 
           {/* Desktop Nav Links */}
@@ -101,12 +99,12 @@ const DashboardNavbar = () => {
 
             {/* User Name */}
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 bg-gradient-to-br from-slate-700 to-slate-900 rounded-full flex items-center justify-center">
-                <span className="text-white text-xs font-bold">
+              <div className="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center">
+                <span className="text-gray-600 text-xs font-semibold">
                   {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                 </span>
               </div>
-              <span className="text-sm font-semibold text-slate-700 max-w-[120px] truncate">
+              <span className="text-sm font-medium text-gray-700 max-w-[120px] truncate">
                 {user?.name || 'User'}
               </span>
             </div>
@@ -146,8 +144,8 @@ const DashboardNavbar = () => {
           <div className="md:hidden border-t border-slate-100 py-3 animate-fade-in">
             {/* Role Badge */}
             <div className="flex items-center gap-3 px-3 py-2 mb-2">
-              <div className="h-10 w-10 bg-gradient-to-br from-slate-700 to-slate-900 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-bold">
+              <div className="h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
+                <span className="text-gray-600 text-sm font-semibold">
                   {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                 </span>
               </div>

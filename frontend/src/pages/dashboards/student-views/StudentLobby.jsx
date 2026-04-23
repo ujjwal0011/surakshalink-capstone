@@ -58,21 +58,21 @@ const StudentLobby = () => {
 
       {/* GAMIFICATION BANNER: PLAYER PROFILE & PROGRESS */}
       {profile && rank && (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8 flex flex-col md:flex-row gap-6 items-center hover:shadow-md transition">
-          <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${rank.color} flex items-center justify-center text-white text-3xl shadow-lg border-4 border-white ring-4 ring-gray-50 flex-shrink-0`}>
+        <div className="bg-white rounded-xl border border-gray-200 p-5 mb-8 flex flex-col md:flex-row gap-5 items-center">
+          <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${rank.color} flex items-center justify-center text-white text-2xl flex-shrink-0`}>
             {rank.title === 'Disaster Master' ? '🌋' :
               rank.title === 'First Responder' ? '🚑' :
                 rank.title === 'Safety Warden' ? '🛡️' : '🎓'}
           </div>
           <div className="flex-1 w-full text-center md:text-left">
-            <h2 className="text-2xl font-black text-gray-800 tracking-tight flex items-center justify-center md:justify-start gap-3">
+            <h2 className="text-xl font-bold text-gray-800 flex items-center justify-center md:justify-start gap-3">
               {profile.name}
-              <span className={`text-xs ml-2 px-3 py-1.5 rounded-full text-white bg-gradient-to-r ${rank.color} uppercase tracking-wider shadow-sm`}>
+              <span className={`text-xs px-2.5 py-1 rounded-full text-white bg-gradient-to-r ${rank.color}`}>
                 {rank.title}
               </span>
             </h2>
-            <div className="flex justify-between text-sm text-gray-500 mt-4 mb-2 font-bold uppercase tracking-wide">
-              <span>{rank.current} XP <span className="text-gray-300 mx-1">|</span> Lvl</span>
+            <div className="flex justify-between text-xs text-gray-500 mt-3 mb-1.5 font-medium uppercase tracking-wide">
+              <span>{rank.current} XP</span>
               {rank.title !== 'Disaster Master' ? (
                 <span>Next: {rank.max} XP ({rank.nextBadge})</span>
               ) : (
@@ -80,15 +80,14 @@ const StudentLobby = () => {
               )}
             </div>
 
-            <div className="w-full bg-gray-100 rounded-full h-4 overflow-hidden relative shadow-inner">
-              {/* Animated Progress Bar */}
+            <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
               <div
                 className={`h-full bg-gradient-to-r ${rank.color} transition-all duration-1000 ease-out`}
                 style={{ width: `${progressPercent}%` }}
               ></div>
             </div>
-            <p className="text-xs text-gray-400 mt-2 text-right">
-              {rank.title !== 'Disaster Master' ? `${rank.max - rank.current} XP to Rank Up!` : 'You are a true survivor!'}
+            <p className="text-xs text-gray-400 mt-1.5 text-right">
+              {rank.title !== 'Disaster Master' ? `${rank.max - rank.current} XP to Rank Up` : 'You are a true survivor!'}
             </p>
           </div>
         </div>
@@ -103,31 +102,25 @@ const StudentLobby = () => {
             const isAttempted = !!result;
 
             return (
-              <div key={quiz._id} className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group">
+              <div key={quiz._id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow group">
                 {/* Quiz Card Header */}
-                <div className={`h-32 flex items-center justify-center relative transition-colors duration-500 ${isAttempted
-                  ? 'bg-gradient-to-br from-emerald-500 to-teal-600'
-                  : 'bg-gradient-to-br from-blue-500 to-indigo-600 group-hover:from-blue-600 group-hover:to-indigo-700'
+                <div className={`px-6 py-4 border-b flex items-center justify-between ${isAttempted
+                  ? 'bg-green-50 border-green-100'
+                  : 'bg-gray-50 border-gray-100'
                   }`}>
-                  <span className="text-4xl filter drop-shadow-md pb-2">{isAttempted ? '✅' : '🛡️'}</span>
-
-                  {/* Completion Badge */}
-                  {isAttempted && (
-                    <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-md border border-white/20 rounded-full px-3 py-1">
-                      <span className="text-white text-xs font-bold drop-shadow-sm">
+                  <span className="text-2xl">{isAttempted ? '✅' : '🛡️'}</span>
+                  <div className="flex items-center gap-2">
+                    {isAttempted && (
+                      <span className="text-xs font-medium text-green-700 bg-green-100 px-2 py-1 rounded">
                         Best: {Math.round(result.bestScore)}%
                       </span>
-                    </div>
-                  )}
-
-                  {/* Attempt Count Badge */}
-                  {isAttempted && result.attemptCount > 1 && (
-                    <div className="absolute top-3 left-3 bg-white/20 backdrop-blur-md border border-white/20 rounded-full px-3 py-1">
-                      <span className="text-white text-xs font-bold drop-shadow-sm">
+                    )}
+                    {isAttempted && result.attemptCount > 1 && (
+                      <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                         {result.attemptCount}x attempts
                       </span>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
 
                 <div className="p-6">
@@ -136,13 +129,9 @@ const StudentLobby = () => {
                     {quiz.description || "Complete this safety drill to earn XP and level up your survivor rank."}
                   </p>
 
-                  <div className="flex items-center justify-between mb-5 text-sm font-bold text-gray-400 bg-gray-50 rounded-lg p-2">
-                    <span className="flex items-center gap-1.5">
-                      ⏱️ {quiz.timeLimit}s
-                    </span>
-                    <span className="flex items-center gap-1.5 text-yellow-500">
-                      🏆 {quiz.xpReward} XP
-                    </span>
+                  <div className="flex items-center justify-between mb-4 text-xs font-medium text-gray-400">
+                    <span>⏱️ {quiz.timeLimit}s</span>
+                    <span>🏆 {quiz.xpReward} XP</span>
                   </div>
 
                   {/* XP Earned Badge (for attempted quizzes) */}
@@ -152,18 +141,18 @@ const StudentLobby = () => {
                         <span className="text-lg">⭐</span>
                         <span className="font-bold text-emerald-700 text-sm">Best XP Earned</span>
                       </div>
-                      <span className="font-black text-emerald-600 text-lg shadow-sm">+{result.bestXp}</span>
+                      <span className="font-bold text-emerald-600 text-lg">+{result.bestXp}</span>
                     </div>
                   )}
 
                   <Link
                     to={`/dashboard/student/quiz/${quiz._id}`}
-                    className={`block w-full text-center py-3 rounded-xl font-bold shadow-sm transition-all duration-300 ${isAttempted
-                      ? 'bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-700 hover:from-indigo-100 hover:to-purple-100 border border-indigo-100'
-                      : 'bg-gray-900 text-white hover:bg-black hover:shadow-md'
+                    className={`block w-full text-center py-2.5 rounded-lg font-medium text-sm transition-colors ${isAttempted
+                      ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      : 'bg-blue-600 text-white hover:bg-blue-700'
                       }`}
                   >
-                    {isAttempted ? '🔄 IMPROVE SCORE' : '🚀 START MISSION'}
+                    {isAttempted ? 'Improve Score' : 'Start Mission'}
                   </Link>
                 </div>
               </div>

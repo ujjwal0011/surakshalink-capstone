@@ -51,26 +51,25 @@ const StudentGuides = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Header */}
-      <div className="bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-700 text-white px-8 py-12">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 px-8 py-8">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl font-black mb-2 flex items-center gap-3">
-            <span className="text-5xl">📚</span>
+          <h1 className="text-2xl font-bold text-gray-900 mb-1">
             Preparedness Guides
           </h1>
-          <p className="text-emerald-100 text-lg max-w-2xl">
+          <p className="text-gray-500 text-sm">
             Learn essential safety procedures and disaster preparedness techniques from your school's experts.
           </p>
 
           {/* Stats */}
-          <div className="flex gap-6 mt-6">
-            <div className="bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20">
-              <p className="text-2xl font-black">{guides.length}</p>
-              <p className="text-xs text-emerald-100 font-medium">Total Guides</p>
+          <div className="flex gap-4 mt-4">
+            <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2">
+              <p className="text-lg font-bold text-gray-900">{guides.length}</p>
+              <p className="text-xs text-gray-500 font-medium">Total Guides</p>
             </div>
-            <div className="bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20">
-              <p className="text-2xl font-black">{categories.length}</p>
-              <p className="text-xs text-emerald-100 font-medium">Categories</p>
+            <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2">
+              <p className="text-lg font-bold text-gray-900">{categories.length}</p>
+              <p className="text-xs text-gray-500 font-medium">Categories</p>
             </div>
           </div>
         </div>
@@ -82,11 +81,10 @@ const StudentGuides = () => {
           <div className="flex flex-wrap gap-2 mb-8">
             <button
               onClick={() => setActiveCategory("All")}
-              className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200 ${
-                activeCategory === "All"
+              className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200 ${activeCategory === "All"
                   ? "bg-gray-900 text-white shadow-lg shadow-gray-900/20"
                   : "bg-white text-gray-600 border border-gray-200 hover:border-gray-400 hover:shadow"
-              }`}
+                }`}
             >
               All Guides
             </button>
@@ -96,11 +94,10 @@ const StudentGuides = () => {
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200 ${
-                    activeCategory === cat
+                  className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200 ${activeCategory === cat
                       ? `${colors.bg} ${colors.text} shadow-md`
                       : "bg-white text-gray-600 border border-gray-200 hover:border-gray-400 hover:shadow"
-                  }`}
+                    }`}
                 >
                   {cat}
                 </button>
@@ -135,26 +132,21 @@ const StudentGuides = () => {
                 <Link
                   key={guide._id}
                   to={`${basePath}/${guide._id}`}
-                  className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                  className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
-                  {/* Gradient Card Header */}
-                  <div className={`h-36 bg-gradient-to-br ${colors.gradient} flex items-center justify-center relative overflow-hidden`}>
-                    {/* Abstract pattern overlay */}
-                    <div className="absolute inset-0 opacity-10">
-                      <div className="absolute top-4 left-4 w-20 h-20 border-4 border-white rounded-full"></div>
-                      <div className="absolute bottom-4 right-4 w-16 h-16 border-4 border-white rounded-lg rotate-45"></div>
-                    </div>
-                    <span className="text-6xl drop-shadow-lg group-hover:scale-125 transition-transform duration-500">
+                  {/* Clean Card Header */}
+                  <div className={`px-5 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50`}>
+                    <span className="text-3xl">
                       {guide.coverEmoji || "📖"}
                     </span>
-                    <span className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold bg-white/90 ${colors.text} backdrop-blur-sm`}>
+                    <span className={`px-2.5 py-1 rounded text-xs font-medium ${colors.bg} ${colors.text}`}>
                       {guide.category || "General"}
                     </span>
                   </div>
 
                   <div className="p-5">
-                    <h3 className="font-bold text-lg text-gray-800 mb-1.5 line-clamp-1 group-hover:text-emerald-700 transition-colors">
+                    <h3 className="font-semibold text-base text-gray-800 mb-1.5 line-clamp-1 group-hover:text-blue-600 transition-colors">
                       {guide.title}
                     </h3>
                     <p className="text-gray-500 text-sm mb-4 line-clamp-2 h-10 leading-relaxed">
@@ -162,16 +154,16 @@ const StudentGuides = () => {
                     </p>
 
                     <div className="flex items-center justify-between text-xs text-gray-400 border-t border-gray-100 pt-3">
-                      <span className="flex items-center gap-1">
-                        📝 {guide.sections?.length || 0} section{guide.sections?.length !== 1 ? "s" : ""}
+                      <span>
+                        {guide.sections?.length || 0} section{guide.sections?.length !== 1 ? "s" : ""}
                       </span>
-                      <span className="flex items-center gap-1">
-                        👤 {guide.createdBy?.name || "Teacher"}
+                      <span>
+                        {guide.createdBy?.name || "Teacher"}
                       </span>
                     </div>
 
                     {/* Read CTA */}
-                    <div className="mt-4 w-full text-center bg-gray-50 text-gray-700 py-2.5 rounded-xl text-sm font-bold group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
+                    <div className="mt-4 w-full text-center bg-gray-50 text-gray-600 py-2 rounded-lg text-sm font-medium group-hover:bg-blue-600 group-hover:text-white transition-all">
                       Read Guide →
                     </div>
                   </div>

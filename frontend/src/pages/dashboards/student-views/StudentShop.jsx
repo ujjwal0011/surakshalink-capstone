@@ -97,10 +97,10 @@ const StudentShop = () => {
 
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
-        <div>
-          <h1 className="text-3xl font-black text-gray-900 tracking-tight">🎒 Go-Bag Shop</h1>
+        {/* <div>
+          <h1 className="text-2xl font-bold text-gray-900">🎒 Go-Bag Shop</h1>
           <p className="text-gray-500 text-sm mt-1">Build your emergency survival kit by spending XP.</p>
-        </div>
+        </div> */}
         <Link
           to="/dashboard/student"
           className="text-sm font-bold text-gray-400 hover:text-gray-600 transition"
@@ -113,7 +113,7 @@ const StudentShop = () => {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8 hover:shadow-md transition">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-5">
           <div>
-            <h2 className="text-lg font-black text-gray-800 flex items-center gap-2">
+            <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
               🎒 My Go-Bag
               <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-full">
                 {shopData.ownedCount}/{shopData.totalItems} Items
@@ -122,9 +122,9 @@ const StudentShop = () => {
             <p className="text-gray-400 text-xs mt-1">Collect all items to complete your survival kit!</p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-r from-yellow-100 to-amber-100 border border-yellow-200 rounded-xl px-4 py-2 flex items-center gap-2">
-              <span className="text-lg">💰</span>
-              <span className="font-black text-yellow-700 text-lg">{shopData.totalXP} XP</span>
+            <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 flex items-center gap-2">
+              <span className="text-sm">💰</span>
+              <span className="font-bold text-gray-700 text-lg">{shopData.totalXP} XP</span>
             </div>
           </div>
         </div>
@@ -137,7 +137,7 @@ const StudentShop = () => {
           </div>
           <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden shadow-inner">
             <div
-              className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-1000 ease-out rounded-full"
+              className="h-full bg-blue-500 transition-all duration-1000 ease-out rounded-full"
               style={{ width: `${completionPercent}%` }}
             ></div>
           </div>
@@ -149,7 +149,7 @@ const StudentShop = () => {
             {ownedItems.map(item => (
               <div
                 key={item.id}
-                className="group relative bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl p-3 flex items-center gap-2 hover:border-indigo-300 hover:shadow-sm transition cursor-default"
+                className="group relative bg-white border border-gray-200 rounded-lg p-3 flex items-center gap-2 hover:border-blue-300 hover:shadow-sm transition cursor-default"
                 title={item.name}
               >
                 <span className="text-2xl">{item.emoji}</span>
@@ -199,7 +199,7 @@ const StudentShop = () => {
           return (
             <div key={tier} className="mb-8">
               <div className="flex items-center gap-3 mb-4">
-                <span className={`text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full ${tierStyle.badge}`}>
+                <span className={`text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full ${tierStyle.badge}`}>
                   {tier} Tier
                 </span>
                 <div className="flex-1 h-px bg-gray-200"></div>
@@ -209,30 +209,29 @@ const StudentShop = () => {
                 {items.map(item => (
                   <div
                     key={item.id}
-                    className={`bg-white rounded-2xl border-2 overflow-hidden transition-all duration-300 ${
-                      item.owned
+                    className={`bg-white rounded-2xl border-2 overflow-hidden transition-all duration-300 ${item.owned
                         ? 'border-green-200 opacity-75'
                         : item.canAfford
                           ? 'border-gray-200 hover:border-indigo-300 hover:shadow-lg hover:-translate-y-1'
                           : 'border-gray-100 opacity-50'
-                    }`}
+                      }`}
                   >
                     {/* Item Header */}
-                    <div className={`h-24 bg-gradient-to-br ${tierStyle.bg} flex items-center justify-center relative`}>
+                    <div className={`h-24 bg-gray-50 border-b border-gray-100 flex items-center justify-center relative`}>
                       <span className="text-5xl filter drop-shadow-md">{item.emoji}</span>
                       {item.owned && (
-                        <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm rounded-full px-2.5 py-1 flex items-center gap-1">
-                          <span className="text-green-600 text-xs font-black">✓ OWNED</span>
+                        <div className="absolute top-2 right-2 bg-green-100 rounded-full px-2.5 py-1 flex items-center gap-1">
+                          <span className="text-green-700 text-xs font-bold">✓ OWNED</span>
                         </div>
                       )}
-                      <div className="absolute top-2 left-2 bg-black/30 backdrop-blur-sm rounded-full px-2.5 py-1">
+                      <div className="absolute top-2 left-2 bg-gray-100 rounded-full px-2.5 py-1">
                         <span className="text-white text-xs font-bold">{item.cost} XP</span>
                       </div>
                     </div>
 
                     {/* Item Body */}
                     <div className="p-5">
-                      <h3 className="font-black text-gray-800 text-lg mb-1">{item.name}</h3>
+                      <h3 className="font-bold text-gray-800 text-lg mb-1">{item.name}</h3>
                       <p className="text-gray-400 text-sm mb-4 leading-relaxed">{item.description}</p>
 
                       {item.owned ? (
@@ -243,7 +242,7 @@ const StudentShop = () => {
                         <button
                           onClick={() => setConfirmItem(item)}
                           disabled={buying === item.id}
-                          className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold text-sm hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                          className="w-full py-2.5 rounded-lg bg-blue-600 text-white font-medium text-sm hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {buying === item.id ? (
                             <span className="flex items-center justify-center gap-2">
@@ -273,12 +272,12 @@ const StudentShop = () => {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden animate-scale-in">
             {/* Modal Header */}
-            <div className={`h-32 bg-gradient-to-br ${TIER_COLORS[confirmItem.tier]?.bg || 'from-gray-400 to-gray-500'} flex items-center justify-center`}>
+            <div className="bg-gray-50 border-b border-gray-200 h-28 flex items-center justify-center">
               <span className="text-7xl filter drop-shadow-lg">{confirmItem.emoji}</span>
             </div>
 
             <div className="p-6">
-              <h3 className="text-xl font-black text-gray-900 text-center mb-1">
+              <h3 className="text-xl font-bold text-gray-900 text-center mb-1">
                 Purchase {confirmItem.name}?
               </h3>
               <p className="text-gray-400 text-sm text-center mb-6">{confirmItem.description}</p>
@@ -295,14 +294,14 @@ const StudentShop = () => {
                 </div>
                 <div className="border-t border-gray-200 pt-2 flex justify-between text-sm">
                   <span className="font-bold text-gray-700">Remaining</span>
-                  <span className="font-black text-indigo-600">{shopData.totalXP - confirmItem.cost} XP</span>
+                  <span className="font-bold text-blue-600">{shopData.totalXP - confirmItem.cost} XP</span>
                 </div>
               </div>
 
               <button
                 onClick={() => handleBuy(confirmItem)}
                 disabled={buying === confirmItem.id}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black text-base hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-lg bg-blue-600 text-white font-medium text-sm hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {buying === confirmItem.id ? (
                   <>
