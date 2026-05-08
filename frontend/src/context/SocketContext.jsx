@@ -14,7 +14,7 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     // Only connect if we have a user logged in
     if (user) {
-      const newSocket = io('http://localhost:5000'); // Your Backend URL
+      const newSocket = io(`${import.meta.env.VITE_BACKEND_URL}`); // Your Backend URL
       setSocket(newSocket);
 
       // 1. Join the School's "Room" immediately
