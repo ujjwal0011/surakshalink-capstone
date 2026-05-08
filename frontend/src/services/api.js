@@ -14,6 +14,7 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    console.log(`${import.meta.env.VITE_BACKEND_URL}/api`);
     return config;
   },
   (error) => Promise.reject(error)

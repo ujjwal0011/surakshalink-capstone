@@ -16,6 +16,7 @@ export const SocketProvider = ({ children }) => {
     if (user) {
       const newSocket = io(`${import.meta.env.VITE_BACKEND_URL}`); // Your Backend URL
       setSocket(newSocket);
+      console.log(`${import.meta.env.VITE_BACKEND_URL}`);
 
       // 1. Join the School's "Room" immediately
       newSocket.emit('join_school', user.schoolId);
