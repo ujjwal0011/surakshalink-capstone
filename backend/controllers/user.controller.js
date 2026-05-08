@@ -22,6 +22,18 @@ export const getStudentsBySchool = async (req, res) => {
   }
 };
 
+export const getTeachersBySchool = async (req, res) => {
+  try {
+    const { schoolId } = req.user;
+    const teachers = await User.find({ schoolId, role: 'teacher' })
+      .select('-password')
+      .sort({ name: 1 });
+    res.json(teachers);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 export const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
